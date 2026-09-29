@@ -1,0 +1,55 @@
+<div class="p-8">
+
+    <app-page-header title="Branding & UI"
+        description="Manage the visual appearance and promotional content of your TV launcher">
+    </app-page-header>
+
+    <app-feature-card title="Banner Management" description="Manage promotional banners displayed on your TV launcher"
+        icon="bi-image">
+
+        <button card-actions type="button" (click)="addBanner()"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#8a5a45] to-[#b98668] text-white text-sm font-semibold shadow-[0_4px_14px_rgba(185,134,104,0.18)] hover:-translate-y-0.5 hover:shadow-[0_7px_20px_rgba(185,134,104,0.25)] transition-all duration-200">
+            <i class="bi bi-plus-lg"></i>
+            Add Banner
+        </button>
+
+        <div class="flex items-center gap-3 mb-6">
+            <div class="relative flex-1">
+                <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-[#64748b]"></i>
+                <input type="text" [(ngModel)]="searchText" placeholder="Search banners..."
+                    class="w-full h-11 pl-11 pr-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.14)] text-sm text-white placeholder:text-[#64748b] outline-none focus:border-[rgba(185,134,104,0.45)] focus:ring-2 focus:ring-[rgba(185,134,104,0.08)] transition-all duration-200" />
+            </div>
+
+            <button type="button" (click)="setFilter('all')"
+                [ngClass]="activeFilter === 'all'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200">
+                All
+            </button>
+
+            <button type="button" (click)="setFilter('active')"
+                [ngClass]="activeFilter === 'active'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200">
+                Active
+            </button>
+
+            <button type="button" (click)="setFilter('inactive')"
+                [ngClass]="activeFilter === 'inactive'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200">
+                Inactive
+            </button>
+        </div>
+
+        <app-empty-state *ngIf="banners.length === 0" icon="bi-images" title="No banners found"
+            description='There are no banners available yet. Click "Add Banner" to create your first promotional banner.'>
+        </app-empty-state>
+
+    </app-feature-card>
+</div>
+
+<app-add-branding *ngIf="showAddBannerModal" (closeModal)="closeAddBannerModal()"></app-add-branding>

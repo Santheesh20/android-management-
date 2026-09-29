@@ -1,0 +1,224 @@
+<div class="p-8">
+
+    <app-page-header title="Organizations" description="Manage distributors, resellers, and partners">
+    </app-page-header>
+
+    <!-- Page switcher -->
+    <div class="flex items-center gap-2 mb-6">
+
+        <a routerLink="/organizations" routerLinkActive="tab-active" [routerLinkActiveOptions]="{ exact: true }"
+            #tabOrg="routerLinkActive"
+            class="h-10 px-5 rounded-xl text-sm font-semibold flex items-center transition-all duration-200 hover:scale-[1.04] active:scale-95"
+            [ngClass]="tabOrg.isActive
+                ? 'bg-[#b98668] text-white shadow-[0_4px_16px_rgba(185,134,104,0.35)]'
+                : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'">
+            Organizations
+        </a>
+
+        <a routerLink="/organizations/users" routerLinkActive="tab-active" #tabUsers="routerLinkActive"
+            class="h-10 px-5 rounded-xl text-sm font-semibold flex items-center transition-all duration-200 hover:scale-[1.04] active:scale-95"
+            [ngClass]="tabUsers.isActive
+                ? 'bg-[#b98668] text-white shadow-[0_4px_16px_rgba(185,134,104,0.35)]'
+                : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'">
+            Users
+        </a>
+
+        <a routerLink="/organizations/roles" routerLinkActive="tab-active" #tabRoles="routerLinkActive"
+            class="h-10 px-5 rounded-xl text-sm font-semibold flex items-center transition-all duration-200 hover:scale-[1.04] active:scale-95"
+            [ngClass]="tabRoles.isActive
+                ? 'bg-[#b98668] text-white shadow-[0_4px_16px_rgba(185,134,104,0.35)]'
+                : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'">
+            Roles &amp; Responsibilities
+        </a>
+    </div>
+
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div
+            class="group bg-[#0d1424] rounded-2xl border border-[rgba(185,134,104,0.12)] shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-5 flex items-center gap-3 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(96,165,250,0.35)] hover:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
+            <span
+                class="w-11 h-11 rounded-xl bg-[rgba(96,165,250,0.12)] border border-[rgba(96,165,250,0.20)] flex items-center justify-center text-[#60a5fa] shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <i class="bi bi-building text-lg"></i>
+            </span>
+            <div>
+                <p class="text-xs text-[#94a3b8]">Distributors</p>
+                <p class="text-xl font-bold text-white mt-0.5">{{ distributorCount }}</p>
+            </div>
+        </div>
+
+        <div
+            class="group bg-[#0d1424] rounded-2xl border border-[rgba(185,134,104,0.12)] shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-5 flex items-center gap-3 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(52,211,153,0.35)] hover:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
+            <span
+                class="w-11 h-11 rounded-xl bg-[rgba(52,211,153,0.12)] border border-[rgba(52,211,153,0.20)] flex items-center justify-center text-emerald-400 shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <i class="bi bi-diagram-3 text-lg"></i>
+            </span>
+            <div>
+                <p class="text-xs text-[#94a3b8]">Resellers (ISPs)</p>
+                <p class="text-xl font-bold text-white mt-0.5">{{ resellerCount }}</p>
+            </div>
+        </div>
+
+        <div
+            class="group bg-[#0d1424] rounded-2xl border border-[rgba(185,134,104,0.12)] shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-5 flex items-center gap-3 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(185,134,104,0.35)] hover:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
+            <span
+                class="w-11 h-11 rounded-xl bg-[rgba(185,134,104,0.12)] border border-[rgba(185,134,104,0.20)] flex items-center justify-center text-[#d9a988] shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <i class="bi bi-people text-lg"></i>
+            </span>
+            <div>
+                <p class="text-xs text-[#94a3b8]">Partners</p>
+                <p class="text-xl font-bold text-white mt-0.5">{{ partnerCount }}</p>
+            </div>
+        </div>
+
+        <div
+            class="group bg-[#0d1424] rounded-2xl border border-[rgba(185,134,104,0.12)] shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-5 flex items-center gap-3 transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(168,85,247,0.35)] hover:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
+            <span
+                class="w-11 h-11 rounded-xl bg-[rgba(168,85,247,0.12)] border border-[rgba(168,85,247,0.20)] flex items-center justify-center text-purple-400 shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <i class="bi bi-check-circle text-lg"></i>
+            </span>
+            <div>
+                <p class="text-xs text-[#94a3b8]">Active</p>
+                <p class="text-xl font-bold text-white mt-0.5">{{ activeCount }}</p>
+            </div>
+        </div>
+    </div>
+
+    <app-feature-card title="All Organizations" description="Browse and manage every organization in your network"
+        icon="bi-diagram-3">
+
+        <button card-actions type="button" (click)="addOrganization()"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#8a5a45] to-[#b98668] text-white text-sm font-semibold shadow-[0_4px_14px_rgba(185,134,104,0.18)] hover:-translate-y-0.5 hover:shadow-[0_7px_20px_rgba(185,134,104,0.25)] transition-all duration-200">
+            <i class="bi bi-plus-lg"></i>
+            Add Organization
+        </button>
+
+        <!-- Search + Filters -->
+        <div class="flex items-center gap-3 mb-6">
+            <div class="relative flex-1">
+                <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-[#64748b]"></i>
+                <input type="text" [(ngModel)]="searchText" placeholder="Search organizations..."
+                    class="w-full h-11 pl-11 pr-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.14)] text-sm text-white placeholder:text-[#64748b] outline-none focus:border-[rgba(185,134,104,0.45)] focus:ring-2 focus:ring-[rgba(185,134,104,0.08)] transition-all duration-200" />
+            </div>
+
+            <button type="button" (click)="setFilter('all')"
+                [ngClass]="activeFilter === 'all'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200 shrink-0">
+                All
+            </button>
+
+            <button type="button" (click)="setFilter('distributor')"
+                [ngClass]="activeFilter === 'distributor'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200 shrink-0">
+                Distributor
+            </button>
+
+            <button type="button" (click)="setFilter('reseller')"
+                [ngClass]="activeFilter === 'reseller'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200 shrink-0">
+                Reseller
+            </button>
+
+            <button type="button" (click)="setFilter('partner')"
+                [ngClass]="activeFilter === 'partner'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200 shrink-0">
+                Partner
+            </button>
+        </div>
+
+        <!-- Table -->
+        <div *ngIf="filteredOrganizations.length > 0" class="overflow-x-auto -mx-2">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-[#64748b] border-b border-[rgba(185,134,104,0.12)]">
+                        <th class="py-2.5 px-2 font-medium">Organization</th>
+                        <th class="py-2.5 px-2 font-medium">Parent</th>
+                        <th class="py-2.5 px-2 font-medium">Type</th>
+                        <th class="py-2.5 px-2 font-medium">Status</th>
+                        <th class="py-2.5 px-2 font-medium">Children</th>
+                        <th class="py-2.5 px-2 font-medium">Usage</th>
+                        <th class="py-2.5 px-2 font-medium">Created</th>
+                        <th class="py-2.5 px-2 font-medium text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let org of filteredOrganizations"
+                        class="border-b border-[rgba(185,134,104,0.08)] hover:bg-[rgba(185,134,104,0.05)] transition-colors duration-150">
+
+                        <td class="py-3.5 px-2">
+                            <div class="flex items-center gap-3">
+                                <span
+                                    class="w-9 h-9 rounded-lg bg-[rgba(52,211,153,0.12)] border border-[rgba(52,211,153,0.18)] flex items-center justify-center text-emerald-400 shrink-0">
+                                    <i class="bi bi-building text-sm"></i>
+                                </span>
+                                <div class="min-w-0">
+                                    <p class="text-[#f1f5f9] font-medium truncate">{{ org.name }}</p>
+                                    <p class="text-xs text-[#64748b]">{{ org.ownerName }}</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-3.5 px-2 text-[#94a3b8] italic">{{ org.parentLabel }}</td>
+
+                        <td class="py-3.5 px-2 text-[#cbd5e1] capitalize">{{ org.type }}</td>
+
+                        <td class="py-3.5 px-2">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+                                [ngClass]="org.status === 'active'
+                                    ? 'bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-500/20'
+                                    : 'bg-[#64748b]/15 text-[#94a3b8] ring-1 ring-[#64748b]/20'">
+                                <i class="bi"
+                                    [ngClass]="org.status === 'active' ? 'bi-check-circle-fill' : 'bi-dash-circle-fill'"></i>
+                                {{ org.status === 'active' ? 'Active' : 'Inactive' }}
+                            </span>
+                        </td>
+
+                        <td class="py-3.5 px-2 text-[#cbd5e1]">{{ org.childrenCount }}</td>
+
+                        <td class="py-3.5 px-2">
+                            <div class="flex items-center gap-3 text-xs text-[#94a3b8]">
+                                <span class="flex items-center gap-1">
+                                    <i class="bi bi-hdd-network"></i>
+                                    {{ org.usageDevices }}/{{ org.usageDevicesLimit }}
+                                </span>
+                                <span class="flex items-center gap-1">
+                                    <i class="bi bi-people"></i>
+                                    {{ org.usageUsers }}/{{ org.usageUsersLimit }}
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="py-3.5 px-2 text-[#94a3b8]">{{ org.createdLabel }}</td>
+
+                        <td class="py-3.5 px-2">
+                            <div class="flex items-center justify-end gap-1">
+                                <button type="button" title="Edit"
+                                    class="w-8 h-8 flex items-center justify-center rounded-lg text-[#94a3b8] hover:text-white hover:bg-[rgba(185,134,104,0.12)] transition-colors duration-150">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button type="button" title="View"
+                                    class="w-8 h-8 flex items-center justify-center rounded-lg text-[#94a3b8] hover:text-white hover:bg-[rgba(185,134,104,0.12)] transition-colors duration-150">
+                                    <i class="bi bi-eye"></i>
+                                </button>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <app-empty-state *ngIf="filteredOrganizations.length === 0" icon="bi-diagram-3" title="No organizations found"
+            description='There are no organizations available yet. Click "Add Organization" to create your first one.'>
+        </app-empty-state>
+    </app-feature-card>
+</div>
+
+<app-add-organization *ngIf="showAddOrganizationModal"
+    (closeModal)="closeAddOrganizationModal()"></app-add-organization>

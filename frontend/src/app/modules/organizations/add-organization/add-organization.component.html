@@ -1,0 +1,226 @@
+<!-- Overlay -->
+<div class="app-modal-overlay fixed inset-0 z-[2000] flex items-center justify-center bg-[#020617]/75 backdrop-blur-md p-6"
+    (click)="onCancel()">
+
+    <!-- Modal card -->
+    <div class="app-modal-card w-full max-w-[640px] max-h-[90vh] bg-[#0d1424]/95 backdrop-blur-xl border border-[rgba(185,134,104,0.18)] rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.65)] flex flex-col overflow-hidden"
+        (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div
+            class="flex items-start justify-between gap-4 px-7 py-5 border-b border-[rgba(185,134,104,0.12)] bg-[#101827]/80 shrink-0">
+
+            <div class="flex items-center gap-3">
+                <span
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8a5a45] to-[#b98668] flex items-center justify-center text-white shadow-[0_4px_14px_rgba(185,134,104,0.22)] shrink-0">
+                    <i class="bi bi-diagram-3 text-lg"></i>
+                </span>
+
+                <div>
+                    <h2 class="text-lg font-bold text-white leading-tight">
+                        Add New Organization
+                    </h2>
+                    <p class="text-xs text-[#94a3b8] mt-0.5">
+                        Create a distributor, reseller, or partner organization
+                    </p>
+                </div>
+            </div>
+
+            <button type="button" (click)="onCancel()" aria-label="Close"
+                class="w-9 h-9 flex items-center justify-center rounded-lg text-[#64748b] hover:text-white hover:bg-[rgba(185,134,104,0.12)] transition-all duration-200 shrink-0">
+                <i class="bi bi-x-lg"></i>
+            </button>
+        </div>
+
+        <!-- Body -->
+        <div class="px-7 py-6 space-y-6 overflow-y-auto">
+
+            <!-- Organization Name -->
+            <div>
+                <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                    Organization Name
+                    <span class="text-[#b98668]">*</span>
+                </label>
+
+                <input type="text" [(ngModel)]="organizationName" name="organizationName" placeholder="Acme Corporation"
+                    class="w-full h-11 px-4 rounded-xl bg-[#101827] border text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:ring-2 transition-all duration-200"
+                    [ngClass]="isNameInvalid
+                        ? 'border-red-500/60 focus:border-red-500 focus:ring-red-500/15'
+                        : 'border-[rgba(185,134,104,0.16)] focus:border-[#b98668] focus:ring-[rgba(185,134,104,0.12)]'" />
+
+                <p class="text-xs mt-1.5" [ngClass]="isNameInvalid ? 'text-red-400' : 'text-transparent'">
+                    Organization name is required.
+                </p>
+            </div>
+
+            <!-- Type + Parent Organization -->
+            <div class="grid grid-cols-2 gap-4">
+
+                <div>
+                    <app-dropdown label="Organization Type *" placeholder="Select type"
+                        [options]="organizationTypeOptions" [value]="organizationType"
+                        (valueChange)="setOrganizationType($event)">
+                    </app-dropdown>
+                    <p class="text-xs mt-1.5" [ngClass]="isTypeInvalid ? 'text-red-400' : 'text-transparent'">
+                        Required.
+                    </p>
+                </div>
+
+                <div>
+                    <app-dropdown label="Parent Organization" placeholder="Select parent"
+                        [options]="parentOrganizationOptions" [value]="parentOrganization"
+                        (valueChange)="setParentOrganization($event)">
+                    </app-dropdown>
+                </div>
+
+            </div>
+
+            <!-- Slug + Status -->
+            <div class="grid grid-cols-2 gap-4">
+
+                <div>
+                    <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                        Slug
+                        <span class="text-[#b98668]">*</span>
+                    </label>
+
+                    <input type="text" [(ngModel)]="slug" name="slug" placeholder="Auto-generated from name"
+                        class="w-full h-11 px-4 rounded-xl bg-[#101827] border text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:ring-2 transition-all duration-200"
+                        [ngClass]="isSlugInvalid
+                            ? 'border-red-500/60 focus:border-red-500 focus:ring-red-500/15'
+                            : 'border-[rgba(185,134,104,0.16)] focus:border-[#b98668] focus:ring-[rgba(185,134,104,0.12)]'" />
+                </div>
+
+                <div>
+                    <app-dropdown label="Status" placeholder="Select status" [options]="statusOptions" [value]="status"
+                        (valueChange)="setStatus($event)">
+                    </app-dropdown>
+                </div>
+
+            </div>
+
+            <!-- Contact Email + Phone -->
+            <div class="grid grid-cols-2 gap-4">
+
+                <div>
+                    <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                        Contact Email
+                    </label>
+
+                    <input type="email" [(ngModel)]="contactEmail" name="contactEmail" placeholder="contact@example.com"
+                        class="w-full h-11 px-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.16)] text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:border-[#b98668] focus:ring-2 focus:ring-[rgba(185,134,104,0.12)] transition-all duration-200" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                        Contact Phone
+                    </label>
+
+                    <input type="text" [(ngModel)]="contactPhone" name="contactPhone" placeholder="+1234567890"
+                        class="w-full h-11 px-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.16)] text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:border-[#b98668] focus:ring-2 focus:ring-[rgba(185,134,104,0.12)] transition-all duration-200" />
+                </div>
+
+            </div>
+
+            <!-- Address -->
+            <div>
+                <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                    Address
+                </label>
+
+                <textarea [(ngModel)]="address" name="address" rows="3" placeholder="123 Main St, City, State, ZIP"
+                    class="w-full px-4 py-3 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.16)] text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:border-[#b98668] focus:ring-2 focus:ring-[rgba(185,134,104,0.12)] transition-all duration-200 resize-none">
+                </textarea>
+            </div>
+
+            <div class="border-t border-[rgba(185,134,104,0.12)]"></div>
+            <div>
+                <h3 class="text-sm font-bold text-[#e2e8f0] mb-3">Banner Settings</h3>
+
+                <div
+                    class="flex items-center justify-between rounded-xl border border-[rgba(185,134,104,0.14)] bg-[#101827] px-4 py-3.5">
+                    <div class="pr-4">
+                        <p class="text-sm font-semibold text-[#e2e8f0]">Inherit Default Banners</p>
+                        <p class="text-xs text-[#64748b] mt-0.5">
+                            When enabled, devices will show TMS Administration default banners alongside this
+                            organization's own banners.
+                        </p>
+                    </div>
+
+                    <button type="button" role="switch" [attr.aria-checked]="inheritDefaultBanners"
+                        (click)="toggleInheritDefaultBanners()"
+                        class="relative w-11 h-6 rounded-full shrink-0 transition-colors duration-200" [ngClass]="inheritDefaultBanners
+                            ? 'bg-gradient-to-r from-[#8a5a45] to-[#b98668]'
+                            : 'bg-[#334155]'">
+                        <span class="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-200"
+                            [ngClass]="inheritDefaultBanners ? 'left-[22px]' : 'left-0.5'">
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="border-t border-[rgba(185,134,104,0.12)]"></div>
+
+            <div>
+                <h3 class="text-sm font-bold text-[#e2e8f0] mb-3">Device Defaults</h3>
+
+                <div
+                    class="flex items-center justify-between rounded-xl border border-[rgba(185,134,104,0.14)] bg-[#101827] px-4 py-3.5">
+                    <div class="pr-4">
+                        <p class="text-sm font-semibold text-[#e2e8f0]">Enable Auto Update for all new devices</p>
+                        <p class="text-xs text-[#64748b] mt-0.5">
+                            When enabled, devices added or assigned to this organization default to Auto Update = ON.
+                            Existing devices are unaffected unless you click "Apply to existing devices" later.
+                            Per-device toggle on the Device → App Auto Update tab still wins.
+                        </p>
+                    </div>
+
+                    <button type="button" role="switch" [attr.aria-checked]="enableAutoUpdate"
+                        (click)="toggleAutoUpdate()"
+                        class="relative w-11 h-6 rounded-full shrink-0 transition-colors duration-200" [ngClass]="enableAutoUpdate
+                            ? 'bg-gradient-to-r from-[#8a5a45] to-[#b98668]'
+                            : 'bg-[#334155]'">
+                        <span class="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-200"
+                            [ngClass]="enableAutoUpdate ? 'left-[22px]' : 'left-0.5'">
+                        </span>
+                    </button>
+                </div>
+            </div>
+
+            <div class="border-t border-[rgba(185,134,104,0.12)]"></div>
+
+            <!-- Customer API Configuration -->
+            <div>
+                <h3 class="text-sm font-bold text-[#e2e8f0] mb-1.5">Customer API Configuration</h3>
+                <p class="text-xs text-[#64748b] mb-3">
+                    Select the API software and configure the endpoint and credentials for fetching customer data.
+                </p>
+
+                <app-dropdown label="API Software" placeholder="-- Select API Software --"
+                    [options]="apiSoftwareOptions" [value]="apiSoftware" (valueChange)="setApiSoftware($event)">
+                </app-dropdown>
+            </div>
+
+        </div>
+
+
+        <!-- Footer -->
+        <div
+            class="flex items-center gap-3 px-7 py-5 border-t border-[rgba(185,134,104,0.12)] bg-[#101827]/80 shrink-0">
+
+            <button type="button" (click)="onCancel()"
+                class="flex-1 h-11 rounded-xl border border-[rgba(185,134,104,0.16)] bg-[#0d1424] text-sm font-semibold text-[#94a3b8] hover:text-white hover:bg-[#151f32] transition-all duration-200">
+                Cancel
+            </button>
+
+            <button type="button" (click)="onSubmit()"
+                class="flex-1 h-11 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#8a5a45] to-[#b98668] shadow-[0_4px_14px_rgba(185,134,104,0.25)] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(185,134,104,0.35)] transition-all duration-200">
+                <i class="bi bi-plus-lg mr-2"></i>
+                Create Organization
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

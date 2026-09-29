@@ -1,0 +1,619 @@
+<!-- Overlay -->
+<div class="app-modal-overlay fixed inset-0 z-[2000] flex items-center justify-center bg-[#020617]/75 backdrop-blur-md p-6"
+    (click)="onCancel()">
+
+    <!-- Modal card -->
+    <div class="app-modal-card w-full max-w-[620px] max-h-[90vh] bg-[#0d1424]/95 backdrop-blur-xl border border-[rgba(185,134,104,0.18)] rounded-2xl shadow-[0_24px_80px_rgba(0,0,0,0.65)] flex flex-col overflow-hidden"
+        (click)="$event.stopPropagation()">
+
+        <!-- Header -->
+        <div
+            class="flex items-start justify-between gap-4 px-7 py-5 border-b border-[rgba(185,134,104,0.12)] bg-[#101827]/80 shrink-0">
+
+            <div class="flex items-center gap-3">
+
+                <span
+                    class="w-10 h-10 rounded-xl bg-gradient-to-br from-[#8a5a45] to-[#b98668] flex items-center justify-center text-white shadow-[0_4px_14px_rgba(185,134,104,0.22)] shrink-0">
+                    <i class="bi bi-image text-lg"></i>
+                </span>
+
+                <div>
+                    <h2 class="text-lg font-bold text-white leading-tight">
+                        Add New Banner
+                    </h2>
+
+                    <p class="text-xs text-[#94a3b8] mt-0.5">
+                        Create a promotional banner for your TV launcher
+                    </p>
+                </div>
+
+            </div>
+
+            <button type="button" (click)="onCancel()" aria-label="Close"
+                class="w-9 h-9 flex items-center justify-center rounded-lg text-[#64748b] hover:text-white hover:bg-[rgba(185,134,104,0.12)] transition-all duration-200 shrink-0">
+
+                <i class="bi bi-x-lg"></i>
+
+            </button>
+
+        </div>
+
+
+        <!-- Body -->
+        <div class="px-7 py-6 space-y-6 overflow-y-auto">
+
+
+            <!-- Storage summary -->
+            <div class="rounded-xl bg-[#111b2d] border border-[rgba(185,134,104,0.12)] px-4 py-3">
+
+                <div class="flex items-center justify-between text-xs">
+
+                    <span class="text-[#94a3b8] font-medium">
+                        Banner storage for this organization
+                    </span>
+
+                    <span class="text-[#e2e8f0] font-semibold">
+                        0.0 MB / 500 MB (0 files)
+                    </span>
+
+                </div>
+
+                <div class="mt-2 h-1.5 rounded-full bg-[#263247] overflow-hidden">
+
+                    <div class="h-full rounded-full bg-gradient-to-r from-[#8a5a45] to-[#b98668]" style="width: 0%">
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Banner name -->
+            <div>
+
+                <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                    Banner Name (Admin Reference)
+                    <span class="text-[#b98668]">*</span>
+                </label>
+
+                <input type="text" placeholder="e.g., Google Banner, MAVX, INNOLENS"
+                    class="w-full h-11 px-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.16)] text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:border-[#b98668] focus:ring-2 focus:ring-[rgba(185,134,104,0.12)] transition-all duration-200" />
+
+                <p class="text-xs mt-1.5 text-[#64748b]">
+                    This name is shown in the admin list only (not sent to devices)
+                </p>
+
+            </div>
+
+
+            <!-- Media type -->
+            <div>
+
+                <app-dropdown label="Media Type" placeholder="Select media type" [options]="mediaTypeOptions"
+                    [value]="mediaType" (valueChange)="setMediaType($event)">
+                </app-dropdown>
+
+            </div>
+
+
+            <!-- Banner image source -->
+            <div>
+
+                <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                    Banner Image
+                    <span class="text-[#b98668]">*</span>
+                </label>
+
+
+                <div class="grid grid-cols-2 gap-3">
+
+                    <button type="button" (click)="setImageSource('upload')"
+                        class="h-11 rounded-xl text-sm font-semibold transition-all duration-200"
+                        [ngClass]="imageSourceType === 'upload'
+                            ? 'bg-gradient-to-r from-[#8a5a45] to-[#b98668] text-white shadow-[0_4px_14px_rgba(185,134,104,0.25)]'
+                            : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:bg-[#151f32] hover:text-white hover:border-[rgba(185,134,104,0.25)]'">
+
+                        Upload Image
+
+                    </button>
+
+
+                    <button type="button" (click)="setImageSource('url')"
+                        class="h-11 rounded-xl text-sm font-semibold transition-all duration-200"
+                        [ngClass]="imageSourceType === 'url'
+                            ? 'bg-gradient-to-r from-[#8a5a45] to-[#b98668] text-white shadow-[0_4px_14px_rgba(185,134,104,0.25)]'
+                            : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:bg-[#151f32] hover:text-white hover:border-[rgba(185,134,104,0.25)]'">
+
+                        Use URL
+
+                    </button>
+
+                </div>
+
+
+                <!-- URL input -->
+                <div *ngIf="imageSourceType === 'url'" class="mt-3">
+
+                    <input type="text" placeholder="https://example.com/banner.jpg or ftp://server.com/image.png"
+                        class="w-full h-11 px-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.16)] text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:border-[#b98668] focus:ring-2 focus:ring-[rgba(185,134,104,0.12)] transition-all duration-200" />
+
+                    <p class="text-xs mt-1.5 text-[#64748b]">
+                        Supported: HTTP/HTTPS URLs, FTP URLs, Direct file paths
+                    </p>
+
+                </div>
+
+            </div>
+
+
+            <!-- Design guide -->
+            <div *ngIf="imageSourceType === 'upload'"
+                class="rounded-xl border border-[rgba(96,165,250,0.20)] bg-[#0d1a2d] overflow-hidden">
+
+
+                <button type="button" (click)="toggleDesignGuide()"
+                    class="w-full flex items-center justify-between px-4 py-3 text-left hover:bg-[rgba(96,165,250,0.04)] transition-colors duration-200">
+
+                    <span class="flex items-center gap-2 text-sm font-semibold text-[#60a5fa]">
+
+                        <i class="bi bi-info-circle"></i>
+
+                        Banner Design Guide — read before uploading
+
+                    </span>
+
+                    <i class="bi text-[#60a5fa] transition-transform duration-200"
+                        [ngClass]="showDesignGuide ? 'bi-chevron-up' : 'bi-chevron-down'">
+                    </i>
+
+                </button>
+
+
+                <div *ngIf="showDesignGuide" class="px-4 pb-4 space-y-4">
+
+
+                    <!-- Size / safe area -->
+                    <div class="grid grid-cols-2 gap-3">
+
+                        <div class="rounded-lg bg-[#111b2d] border border-[rgba(96,165,250,0.16)] px-3 py-2.5">
+
+                            <p class="text-[10px] font-bold tracking-wide text-[#60a5fa] uppercase">
+                                Recommended Size
+                            </p>
+
+                            <p class="text-sm font-bold text-[#e2e8f0] mt-0.5">
+                                1920 &times; 1080 px
+                            </p>
+
+                            <p class="text-[11px] text-[#64748b]">
+                                16:9 — Full HD, native TV
+                            </p>
+
+                        </div>
+
+
+                        <div class="rounded-lg bg-[#211b12] border border-[rgba(234,179,8,0.20)] px-3 py-2.5">
+
+                            <p class="text-[10px] font-bold tracking-wide text-[#fbbf24] uppercase">
+                                Safe Area
+                            </p>
+
+                            <p class="text-sm font-bold text-[#e2e8f0] mt-0.5">
+                                1664 &times; 936 px
+                            </p>
+
+                            <p class="text-[11px] text-[#94a3b8]">
+                                Keep all text / logos inside this centred zone
+                            </p>
+
+                        </div>
+
+                    </div>
+
+
+                    <!-- Visual guide -->
+                    <div>
+
+                        <p class="text-[10px] font-bold tracking-wide text-[#64748b] uppercase mb-1.5">
+                            Visual Guide
+                        </p>
+
+                        <svg viewBox="0 0 640 360" class="w-full rounded-lg border border-[rgba(96,165,250,0.18)]">
+
+                            <defs>
+
+                                <linearGradient id="bannerGuideGradient" x1="0" y1="0" x2="1" y2="1">
+
+                                    <stop offset="0%" stop-color="#3b3f8f" />
+
+                                    <stop offset="100%" stop-color="#7a3b52" />
+
+                                </linearGradient>
+
+                            </defs>
+
+
+                            <rect x="0" y="0" width="640" height="360" fill="url(#bannerGuideGradient)" />
+
+
+                            <rect x="0" y="0" width="640" height="360" fill="none" stroke="#ef4444" stroke-width="2"
+                                opacity="0.9" />
+
+
+                            <rect x="22" y="22" width="596" height="316" fill="none" stroke="#ef4444" stroke-width="1.5"
+                                stroke-dasharray="4 4" opacity="0.7" />
+
+
+                            <rect x="45" y="45" width="550" height="270" fill="none" stroke="#22c55e" stroke-width="2"
+                                stroke-dasharray="6 5" />
+
+
+                            <text x="14" y="18" font-size="11" fill="#ffffff" opacity="0.85">
+                                1920 &times; 1080 — Full Bleed
+                            </text>
+
+
+                            <text x="626" y="18" font-size="11" fill="#facc15" text-anchor="end">
+                                ~7% margin
+                            </text>
+
+
+                            <rect x="60" y="60" width="64" height="24" rx="4" fill="rgba(255,255,255,0.18)"
+                                stroke="rgba(255,255,255,0.5)" />
+
+
+                            <text x="92" y="76" font-size="10" fill="#ffffff" text-anchor="middle" font-weight="600">
+                                LOGO
+                            </text>
+
+
+                            <text x="320" y="185" font-size="26" fill="#ffffff" text-anchor="middle" font-weight="700">
+                                Headline goes here
+                            </text>
+
+
+                            <text x="320" y="210" font-size="12" fill="#e2e8f0" text-anchor="middle">
+                                Sub-text / call to action
+                            </text>
+
+
+                            <text x="580" y="300" font-size="10" fill="#4ade80" text-anchor="end">
+                                Safe Area · 1664 &times; 936
+                            </text>
+
+                        </svg>
+
+
+                        <div class="flex items-center gap-4 mt-2 text-[11px] text-[#64748b]">
+
+                            <span class="flex items-center gap-1.5">
+
+                                <span class="w-2.5 h-2.5 rounded-sm bg-green-500 inline-block">
+                                </span>
+
+                                Safe area (place content here)
+
+                            </span>
+
+
+                            <span class="flex items-center gap-1.5">
+
+                                <span class="w-2.5 h-2.5 rounded-sm bg-red-500 inline-block">
+                                </span>
+
+                                Unsafe edge (avoid text/logos)
+
+                            </span>
+
+                        </div>
+
+
+                        <p class="text-[11px] text-[#64748b] mt-1.5">
+
+                            The red ring (~128 px / 7% on each edge) is the unsafe zone — TV cropping or overscan
+                            can clip content there. The green-bordered centre is your safe area.
+
+                        </p>
+
+                    </div>
+
+
+                    <!-- How it's processed -->
+                    <div>
+
+                        <p class="text-[10px] font-bold tracking-wide text-[#64748b] uppercase mb-1.5">
+                            How Your Image Is Processed
+                        </p>
+
+                        <ul class="space-y-1 text-xs text-[#94a3b8]">
+
+                            <li class="flex items-start gap-1.5">
+
+                                <i class="bi bi-check-circle-fill text-green-500 mt-0.5"></i>
+
+                                <span>
+                                    <strong class="text-[#cbd5e1]">Near 16:9 source</strong>
+                                    → fills TV edge-to-edge in full quality (best result).
+                                </span>
+
+                            </li>
+
+
+                            <li class="flex items-start gap-1.5">
+
+                                <i class="bi bi-check-circle-fill text-green-500 mt-0.5"></i>
+
+                                <span>
+                                    <strong class="text-[#cbd5e1]">Other ratios</strong>
+                                    (square, vertical, ultra-wide) → original kept sharp, sides
+                                    auto-filled with a soft blurred extension of the same image. No black bars.
+                                </span>
+
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+
+                    <!-- Upload tips -->
+                    <div>
+
+                        <p class="text-[10px] font-bold tracking-wide text-[#64748b] uppercase mb-1.5">
+                            Upload Tips
+                        </p>
+
+                        <ul class="space-y-1 text-xs text-[#94a3b8] list-disc list-inside">
+
+                            <li>
+                                Use 16:9 (1920&times;1080) for the cleanest, most premium TV look.
+                            </li>
+
+                            <li>
+                                Don't place text or logos within ~7% of any edge — keep them in the safe area.
+                            </li>
+
+                            <li>
+                                Use high-resolution artwork — minimum 1920 px wide. Low-res uploads will look soft on a
+                                TV.
+                            </li>
+
+                            <li>
+                                Background art can extend to all four edges (bleed) — only the centre safe area is
+                                guaranteed visible.
+                            </li>
+
+                            <li>
+                                Avoid pure-black edges (the soft-blur fallback blends better with continuous artwork).
+                            </li>
+
+                        </ul>
+
+                    </div>
+
+
+                    <!-- Format bar -->
+                    <div
+                        class="rounded-lg bg-[#111b2d] border border-[rgba(96,165,250,0.16)] px-3 py-2 text-[11px] text-[#94a3b8] flex flex-wrap gap-x-5 gap-y-1">
+
+                        <span>
+                            <strong class="text-[#cbd5e1]">Format:</strong>
+                            JPG / PNG / WEBP
+                        </span>
+
+                        <span>
+                            <strong class="text-[#cbd5e1]">Max upload:</strong>
+                            20 MB
+                        </span>
+
+                        <span>
+                            <strong class="text-[#cbd5e1]">Output:</strong>
+                            JPEG q=0.92, ~300–600 KB
+                        </span>
+
+                        <span>
+                            <strong class="text-[#cbd5e1]">Colour:</strong>
+                            sRGB
+                        </span>
+
+                    </div>
+
+
+                    <!-- Warning -->
+                    <div
+                        class="rounded-lg bg-[#211b12] border border-[rgba(234,179,8,0.20)] px-3 py-2 text-[11px] text-[#fbbf24] flex items-start gap-1.5">
+
+                        <i class="bi bi-exclamation-triangle-fill mt-0.5"></i>
+
+                        <span>
+                            Existing banners are unaffected — the new processing only runs on fresh uploads.
+                        </span>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+
+            <!-- Upload dropzone -->
+            <div *ngIf="imageSourceType === 'upload'">
+
+                <input #fileInput type="file" accept="image/png,image/jpeg,image/webp" class="hidden"
+                    (change)="onFileSelected($event)" />
+
+
+                <div *ngIf="!selectedFileName" (click)="triggerFileInput(fileInput)" (dragover)="onDragOver($event)"
+                    (dragleave)="onDragLeave($event)" (drop)="onDrop($event)"
+                    class="rounded-xl border-2 border-dashed px-4 py-9 flex flex-col items-center justify-center text-center cursor-pointer transition-all duration-200"
+                    [ngClass]="isDraggingOver
+                        ? 'border-[#b98668] bg-[rgba(185,134,104,0.08)]'
+                        : 'border-[rgba(185,134,104,0.18)] bg-[#101827] hover:border-[#b98668] hover:bg-[#131e31]'">
+
+                    <i class="bi bi-cloud-arrow-up text-3xl text-[#b98668]"></i>
+
+                    <p class="text-sm font-semibold text-[#e2e8f0] mt-3">
+                        Click to upload banner image
+                    </p>
+
+                    <p class="text-xs text-[#64748b] mt-1">
+                        PNG / JPG / WEBP up to 20 MB — auto-resized to
+                        1920&times;1080 for TV display
+                    </p>
+
+                </div>
+
+
+                <!-- Selected file preview -->
+                <div *ngIf="selectedFileName"
+                    class="rounded-xl border border-[rgba(185,134,104,0.16)] bg-[#101827] p-3 flex items-center gap-3">
+
+                    <img [src]="imagePreviewUrl" alt="Banner preview"
+                        class="w-20 h-12 rounded-lg object-cover border border-[rgba(185,134,104,0.16)]" />
+
+                    <div class="flex-1 min-w-0">
+
+                        <p class="text-sm font-medium text-[#e2e8f0] truncate">
+                            {{ selectedFileName }}
+                        </p>
+
+                    </div>
+
+                    <button type="button" (click)="removeSelectedImage()"
+                        class="w-8 h-8 flex items-center justify-center rounded-lg text-[#94a3b8] hover:text-red-400 hover:bg-red-500/10 transition-all duration-150">
+
+                        <i class="bi bi-trash"></i>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- Show title & subtitle toggle -->
+            <div
+                class="flex items-center justify-between rounded-xl border border-[rgba(185,134,104,0.14)] bg-[#101827] px-4 py-3.5">
+
+                <div class="pr-4">
+
+                    <p class="text-sm font-semibold text-[#e2e8f0]">
+                        Show Title &amp; Subtitle
+                    </p>
+
+                    <p class="text-xs text-[#64748b] mt-0.5">
+                        When disabled, title and subtitle will be hidden on the device (useful for image/video-only
+                        banners)
+                    </p>
+
+                </div>
+
+
+                <button type="button" role="switch" [attr.aria-checked]="showTitleSubtitle"
+                    (click)="toggleTitleSubtitle()"
+                    class="relative w-11 h-6 rounded-full shrink-0 transition-colors duration-200" [ngClass]="showTitleSubtitle
+                        ? 'bg-gradient-to-r from-[#8a5a45] to-[#b98668]'
+                        : 'bg-[#334155]'">
+
+                    <span class="absolute top-0.5 w-5 h-5 rounded-full bg-white shadow transition-all duration-200"
+                        [ngClass]="showTitleSubtitle
+                            ? 'left-[22px]'
+                            : 'left-0.5'">
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- Title / subtitle fields -->
+            <ng-container *ngIf="showTitleSubtitle">
+
+                <div>
+
+                    <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                        Title (Optional)
+                    </label>
+
+                    <input type="text" placeholder="Enter banner title (optional for video-only banners)"
+                        class="w-full h-11 px-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.16)] text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:border-[#b98668] focus:ring-2 focus:ring-[rgba(185,134,104,0.12)] transition-all duration-200" />
+                </div>
+
+                <div>
+                    <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                        Subtitle / Section Title
+                    </label>
+
+                    <input type="text" value="Recommended For You"
+                        class="w-full h-11 px-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.16)] text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:border-[#b98668] focus:ring-2 focus:ring-[rgba(185,134,104,0.12)] transition-all duration-200" />
+
+                    <p class="text-xs text-[#64748b] mt-1.5">
+                        This text appears below the banner title in the launcher
+                    </p>
+
+                </div>
+
+            </ng-container>
+
+            <!-- Click action link -->
+            <div>
+                <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                    Click Action Link (Optional)
+                </label>
+
+                <input type="text" placeholder="https://example.com"
+                    class="w-full h-11 px-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.16)] text-sm text-[#f1f5f9] placeholder:text-[#64748b] outline-none focus:border-[#b98668] focus:ring-2 focus:ring-[rgba(185,134,104,0.12)] transition-all duration-200" />
+            </div>
+
+            <!-- Display order -->
+            <div>
+                <label class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+                    Display Order
+                </label>
+
+                <input type="number" value="0"
+                    class="w-full h-11 px-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.16)] text-sm text-[#f1f5f9] outline-none focus:border-[#b98668] focus:ring-2 focus:ring-[rgba(185,134,104,0.12)] transition-all duration-200" />
+
+            </div>
+
+            <!-- Active -->
+            <label class="flex items-center gap-2.5 cursor-pointer select-none">
+
+                <input type="checkbox" checked
+                    class="w-4 h-4 rounded border-[#475569] bg-[#101827] text-[#b98668] focus:ring-[rgba(185,134,104,0.25)]" />
+
+                <span class="text-sm font-medium text-[#cbd5e1]">
+                    Active (visible on launcher)
+                </span>
+
+            </label>
+
+        </div>
+
+
+        <!-- Footer -->
+        <div
+            class="flex items-center gap-3 px-7 py-5 border-t border-[rgba(185,134,104,0.12)] bg-[#101827]/80 shrink-0">
+
+            <button type="button" (click)="onCancel()"
+                class="flex-1 h-11 rounded-xl border border-[rgba(185,134,104,0.16)] bg-[#0d1424] text-sm font-semibold text-[#94a3b8] hover:text-white hover:bg-[#151f32] transition-all duration-200">
+
+                Cancel
+
+            </button>
+
+
+            <button type="button" (click)="onSubmit()"
+                class="flex-1 h-11 rounded-xl text-sm font-semibold text-white bg-gradient-to-r from-[#8a5a45] to-[#b98668] shadow-[0_4px_14px_rgba(185,134,104,0.25)] hover:-translate-y-0.5 hover:shadow-[0_8px_24px_rgba(185,134,104,0.35)] transition-all duration-200">
+
+                <i class="bi bi-plus-lg mr-2"></i>
+
+                Create Banner
+
+            </button>
+
+        </div>
+
+    </div>
+
+</div>

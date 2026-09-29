@@ -1,0 +1,25 @@
+<aside
+  class="fixed top-0 left-0 h-screen z-[999] text-[#cbd5e1] bg-gradient-to-b from-[#0b0f1a] via-[#0d1424] to-[#101a30] border-r border-[rgba(185,134,104,0.12)] transition-all duration-300"
+  [ngClass]="collapsed ? 'w-[120px]' : 'w-[250px]'">
+
+  <div class="px-3 pt-5 pb-2.5 text-center">
+    <img src="assets/images/lensCipher.png" alt="TV MAX Connect"
+      class="inline-block mx-auto [filter:drop-shadow(0_0_6px_rgba(185,134,104,0.35))]"
+      [ngClass]="collapsed ? 'w-16' : 'w-4/5'" />
+  </div>
+
+  <ul class="list-none py-2 pb-5 m-0 p-0">
+    <li *ngFor="let item of menuItems">
+      <a [routerLink]="item.route" routerLinkActive [routerLinkActiveOptions]="{ exact: true }" #rla="routerLinkActive"
+        class="relative block transition-all duration-200"
+        [ngClass]="[collapsed ? 'text-center text-xs py-[15px] px-0' : 'text-[15px] py-[15px] pl-[25px] pr-4 my-[5px]', rla.isActive ? 'text-white opacity-100 bg-gradient-to-r from-[rgba(185,134,104,0.18)] to-[rgba(185,134,104,0.03)] shadow-[inset_0_0_0_1px_rgba(185,134,104,0.15)]' : 'text-[#cbd5e1] opacity-60 hover:opacity-100 hover:text-white hover:bg-[rgba(185,134,104,0.08)]']">
+        <i class="bi {{ item.icon }}"
+          [ngClass]="collapsed ? 'block mx-auto mb-1 text-lg' : 'inline-block w-[18px] mr-2 relative -top-px text-base'"></i>
+        <span>{{ item.label }}</span>
+        <span *ngIf="rla.isActive"
+          class="absolute right-0 top-0 bottom-0 w-[3px] bg-[#b98668] shadow-[0_0_8px_rgba(185,134,104,0.8)]"></span>
+      </a>
+    </li>
+  </ul>
+
+</aside>

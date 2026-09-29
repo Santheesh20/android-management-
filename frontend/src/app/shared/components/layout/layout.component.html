@@ -1,0 +1,56 @@
+<div class="flex w-full h-screen overflow-hidden bg-[#0a0e1a]">
+
+  <app-sidenav [collapsed]="sidebarActive"></app-sidenav>
+
+  <div class="flex flex-col h-screen box-border overflow-hidden bg-[#0a0e1a] pt-[70px] transition-all duration-300"
+    [ngClass]="sidebarActive ? 'w-[calc(100%-120px)] ml-[120px]' : 'w-[calc(100%-250px)] ml-[250px]'">
+
+    <nav
+      class="fixed top-0 right-0 min-h-[70px] px-[10px] py-[15px] box-border bg-[#0d1424] border-b border-[rgba(185,134,104,0.1)] shadow-[0_2px_12px_rgba(0,0,0,0.25)] z-[1000] flex items-center justify-between transition-all duration-300"
+      [ngClass]="sidebarActive ? 'w-[calc(100%-120px)]' : 'w-[calc(100%-250px)]'">
+
+      <button (click)="toggle()" class="bg-transparent border-none cursor-pointer focus:outline-none">
+        <i class="bi bi-list text-[22px] text-[#cbd5e1]"></i>
+      </button>
+
+      <div class="relative ml-5 pt-[5px]">
+        <button (click)="toggleProfile()" class="flex items-center bg-transparent border-none cursor-pointer">
+          <span
+            class="inline-block w-[30px] h-[30px] mr-2.5 rounded-full bg-gradient-to-br from-[#1c2540] to-[#b98668] shadow-[0_0_0_1px_rgba(185,134,104,0.3)] text-white text-center leading-[30px]">A</span>
+          <span class="text-[#e5e7eb] flex items-center">
+            Admin
+            <i class="bi bi-chevron-down text-xs ml-1 text-[#64748b]"></i>
+          </span>
+        </button>
+
+        <div *ngIf="isProfileOpen"
+          class="absolute top-full right-0 min-w-[150px] py-2 bg-[#131a2b] border border-[rgba(185,134,104,0.15)] rounded-md shadow-[0_8px_24px_rgba(0,0,0,0.4)] z-[1100]">
+          <a routerLink="/profile"
+            class="flex items-center gap-2 mx-1.5 px-4 py-1 rounded text-sm text-[#cbd5e1] hover:bg-[rgba(185,134,104,0.12)] hover:text-white transition-colors">
+            <i class="bi bi-person text-lg"></i>
+            <span>Profile</span>
+          </a>
+          <a (click)="logout()"
+            class="flex items-center gap-2 mx-1.5 px-4 py-1 rounded text-sm text-[#cbd5e1] hover:bg-[rgba(185,134,104,0.12)] hover:text-white transition-colors cursor-pointer">
+            <i class="bi bi-box-arrow-right text-lg"></i>
+            <span>Logout</span>
+          </a>
+        </div>
+      </div>
+
+    </nav>
+
+    <div class="flex-1 min-h-0 overflow-x-hidden overflow-y-auto box-border text-[#e5e7eb]">
+      <router-outlet></router-outlet>
+    </div>
+
+    <div
+      class="w-full shrink-0 py-3.5 box-border bg-[#0d1424] border-t border-[rgba(185,134,104,0.1)] text-center z-10">
+      <p class="m-0 text-[#94a3b8] text-sm">
+        Copyright © 2026 TV MAX Connect. All rights reserved.
+        <span class="ml-1 text-[#64748b] text-xs">v1.0.0</span>
+      </p>
+    </div>
+
+  </div>
+</div>

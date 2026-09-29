@@ -1,0 +1,200 @@
+<div class="p-8">
+
+    <app-page-header title="Organizations" description="Manage distributors, resellers, and partners">
+    </app-page-header>
+
+    <!-- Page switcher -->
+    <div class="flex items-center gap-2 mb-6">
+
+        <a routerLink="/organizations" routerLinkActive="tab-active" [routerLinkActiveOptions]="{ exact: true }"
+            #tabOrg="routerLinkActive"
+            class="h-10 px-5 rounded-xl text-sm font-semibold flex items-center transition-all duration-200 hover:scale-[1.04] active:scale-95"
+            [ngClass]="tabOrg.isActive
+                ? 'bg-[#b98668] text-white shadow-[0_4px_16px_rgba(185,134,104,0.35)]'
+                : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'">
+            Organizations
+        </a>
+
+        <a routerLink="/organizations/users" routerLinkActive="tab-active" #tabUsers="routerLinkActive"
+            class="h-10 px-5 rounded-xl text-sm font-semibold flex items-center transition-all duration-200 hover:scale-[1.04] active:scale-95"
+            [ngClass]="tabUsers.isActive
+                ? 'bg-[#b98668] text-white shadow-[0_4px_16px_rgba(185,134,104,0.35)]'
+                : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'">
+            Users
+        </a>
+
+        <a routerLink="/organizations/roles" routerLinkActive="tab-active" #tabRoles="routerLinkActive"
+            class="h-10 px-5 rounded-xl text-sm font-semibold flex items-center transition-all duration-200 hover:scale-[1.04] active:scale-95"
+            [ngClass]="tabRoles.isActive
+                ? 'bg-[#b98668] text-white shadow-[0_4px_16px_rgba(185,134,104,0.35)]'
+                : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'">
+            Roles &amp; Responsibilities
+        </a>
+
+    </div>
+
+    <!-- Stat cards -->
+    <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
+
+        <div class="group bg-[#0d1424] rounded-2xl border border-[rgba(185,134,104,0.12)] shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-5 flex items-start justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(96,165,250,0.35)] hover:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
+            <div>
+                <p class="text-xs text-[#94a3b8]">Total Roles</p>
+                <p class="text-2xl font-bold text-white mt-1">{{ totalRoles }}</p>
+            </div>
+            <span class="w-11 h-11 rounded-xl bg-[rgba(96,165,250,0.12)] border border-[rgba(96,165,250,0.20)] flex items-center justify-center text-[#60a5fa] shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <i class="bi bi-shield-lock text-lg"></i>
+            </span>
+        </div>
+
+        <div class="group bg-[#0d1424] rounded-2xl border border-[rgba(185,134,104,0.12)] shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-5 flex items-start justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(52,211,153,0.35)] hover:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
+            <div>
+                <p class="text-xs text-[#94a3b8]">Active Roles</p>
+                <p class="text-2xl font-bold text-emerald-400 mt-1">{{ activeRolesCount }}</p>
+            </div>
+            <span class="w-11 h-11 rounded-xl bg-[rgba(52,211,153,0.12)] border border-[rgba(52,211,153,0.20)] flex items-center justify-center text-emerald-400 shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <i class="bi bi-check-circle-fill text-lg"></i>
+            </span>
+        </div>
+
+        <div class="group bg-[#0d1424] rounded-2xl border border-[rgba(185,134,104,0.12)] shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-5 flex items-start justify-between transition-all duration-300 hover:-translate-y-1 hover:border-[rgba(168,85,247,0.35)] hover:shadow-[0_10px_28px_rgba(0,0,0,0.4)]">
+            <div>
+                <p class="text-xs text-[#94a3b8]">Users Assigned</p>
+                <p class="text-2xl font-bold text-purple-400 mt-1">{{ totalUsersAssigned }}</p>
+            </div>
+            <span class="w-11 h-11 rounded-xl bg-[rgba(168,85,247,0.12)] border border-[rgba(168,85,247,0.20)] flex items-center justify-center text-purple-400 shrink-0 transition-transform duration-300 group-hover:scale-110">
+                <i class="bi bi-people text-lg"></i>
+            </span>
+        </div>
+
+    </div>
+
+    <app-feature-card
+        title="All Roles"
+        description="Define permission sets and assign responsibilities across your organization"
+        icon="bi-shield-lock">
+
+        <button card-actions type="button" (click)="addRole()"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#8a5a45] to-[#b98668] text-white text-sm font-semibold shadow-[0_4px_14px_rgba(185,134,104,0.18)] hover:-translate-y-0.5 hover:shadow-[0_7px_20px_rgba(185,134,104,0.25)] transition-all duration-200">
+            <i class="bi bi-plus-lg"></i>
+            Add Role
+        </button>
+
+        <!-- Search + Filters -->
+        <div class="flex items-center gap-3 mb-6">
+            <div class="relative flex-1">
+                <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-[#64748b]"></i>
+                <input type="text" [(ngModel)]="searchText" placeholder="Search roles..."
+                    class="w-full h-11 pl-11 pr-4 rounded-xl bg-[#101827] border border-[rgba(185,134,104,0.14)] text-sm text-white placeholder:text-[#64748b] outline-none focus:border-[rgba(185,134,104,0.45)] focus:ring-2 focus:ring-[rgba(185,134,104,0.08)] transition-all duration-200" />
+            </div>
+
+            <button type="button" (click)="setFilter('all')"
+                [ngClass]="activeFilter === 'all'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200 shrink-0">
+                All
+            </button>
+
+            <button type="button" (click)="setFilter('active')"
+                [ngClass]="activeFilter === 'active'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200 shrink-0">
+                Active
+            </button>
+
+            <button type="button" (click)="setFilter('inactive')"
+                [ngClass]="activeFilter === 'inactive'
+          ? 'bg-[#b98668] text-white border-[#b98668]'
+          : 'bg-[#101827] text-[#94a3b8] border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'"
+                class="h-11 px-5 rounded-xl border text-sm font-medium transition-all duration-200 shrink-0">
+                Inactive
+            </button>
+        </div>
+
+        <!-- Table -->
+        <div *ngIf="filteredRoles.length > 0" class="overflow-x-auto -mx-2">
+            <table class="w-full text-sm">
+                <thead>
+                    <tr class="text-left text-[#64748b] border-b border-[rgba(185,134,104,0.12)]">
+                        <th class="py-2.5 px-2 font-medium">Role</th>
+                        <th class="py-2.5 px-2 font-medium">Permissions</th>
+                        <th class="py-2.5 px-2 font-medium">Users Assigned</th>
+                        <th class="py-2.5 px-2 font-medium">Status</th>
+                        <th class="py-2.5 px-2 font-medium text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let role of filteredRoles"
+                        class="border-l-2 border-transparent border-b border-b-[rgba(185,134,104,0.08)] hover:border-l-[#b98668] hover:bg-[rgba(185,134,104,0.05)] transition-all duration-200">
+
+                        <td class="py-3.5 px-2">
+                            <div class="flex items-center gap-3">
+                                <span class="w-9 h-9 rounded-lg bg-[rgba(185,134,104,0.12)] border border-[rgba(185,134,104,0.18)] flex items-center justify-center text-[#d9a988] shrink-0">
+                                    <i class="bi bi-shield-lock text-sm"></i>
+                                </span>
+                                <div class="min-w-0">
+                                    <p class="text-[#f1f5f9] font-medium truncate">{{ role.name }}</p>
+                                    <p class="text-xs text-[#64748b] truncate max-w-[240px]">{{ role.description }}</p>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="py-3.5 px-2">
+                            <div class="flex flex-wrap items-center gap-1.5">
+                                <span *ngFor="let permission of visiblePermissions(role)"
+                                    class="px-2 py-0.5 rounded-full text-xs font-medium bg-[rgba(185,134,104,0.14)] text-[#d9a988] whitespace-nowrap">
+                                    {{ permission }}
+                                </span>
+                                <span *ngIf="extraPermissionsCount(role) > 0"
+                                    class="px-2 py-0.5 rounded-full text-xs font-medium bg-[#101827] text-[#64748b] border border-[rgba(185,134,104,0.12)]">
+                                    +{{ extraPermissionsCount(role) }} more
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="py-3.5 px-2 text-[#cbd5e1]">
+                            <span class="flex items-center gap-1.5">
+                                <i class="bi bi-people text-[#64748b]"></i>
+                                {{ role.usersAssigned }}
+                            </span>
+                        </td>
+
+                        <td class="py-3.5 px-2">
+                            <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+                                [ngClass]="role.status === 'active'
+                                    ? 'bg-emerald-500/15 text-emerald-400 ring-1 ring-emerald-500/20'
+                                    : 'bg-[#64748b]/15 text-[#94a3b8] ring-1 ring-[#64748b]/20'">
+                                <i class="bi" [ngClass]="role.status === 'active' ? 'bi-check-circle-fill' : 'bi-dash-circle-fill'"></i>
+                                {{ role.status === 'active' ? 'Active' : 'Inactive' }}
+                            </span>
+                        </td>
+
+                        <td class="py-3.5 px-2">
+                            <div class="flex items-center justify-end gap-1">
+                                <button type="button" title="Edit"
+                                    class="w-8 h-8 flex items-center justify-center rounded-lg text-[#94a3b8] hover:text-white hover:bg-[rgba(185,134,104,0.12)] transition-colors duration-150">
+                                    <i class="bi bi-pencil"></i>
+                                </button>
+                                <button type="button" title="Delete"
+                                    class="w-8 h-8 flex items-center justify-center rounded-lg text-[#94a3b8] hover:text-red-400 hover:bg-red-500/10 transition-colors duration-150">
+                                    <i class="bi bi-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <app-empty-state
+            *ngIf="filteredRoles.length === 0"
+            icon="bi-shield-lock"
+            title="No roles found"
+            description='There are no roles defined yet. Click "Add Role" to create your first one.'>
+        </app-empty-state>
+
+    </app-feature-card>
+
+</div>

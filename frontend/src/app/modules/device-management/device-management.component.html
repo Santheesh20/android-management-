@@ -1,0 +1,168 @@
+<div class="p-8">
+
+    <app-page-header title="Device Management" description="Manage and monitor devices connected to your network">
+    </app-page-header>
+
+    <!-- Page switcher -->
+    <div class="flex items-center gap-2 mb-6">
+        <a routerLink="/device-management" routerLinkActive="tab-active" [routerLinkActiveOptions]="{ exact: true }"
+            #tabDevices="routerLinkActive"
+            class="h-10 px-5 rounded-xl text-sm font-semibold flex items-center transition-all duration-200 hover:scale-[1.04] active:scale-95"
+            [ngClass]="tabDevices.isActive
+                ? 'bg-[#b98668] text-white shadow-[0_4px_16px_rgba(185,134,104,0.35)]'
+                : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'">
+            Devices
+        </a>
+
+        <a routerLink="/device-management/inventory" routerLinkActive="tab-active" #tabInventory="routerLinkActive"
+            class="h-10 px-5 rounded-xl text-sm font-semibold flex items-center transition-all duration-200 hover:scale-[1.04] active:scale-95"
+            [ngClass]="tabInventory.isActive
+                ? 'bg-[#b98668] text-white shadow-[0_4px_16px_rgba(185,134,104,0.35)]'
+                : 'bg-[#101827] text-[#94a3b8] border border-[rgba(185,134,104,0.12)] hover:text-white hover:border-[rgba(185,134,104,0.3)]'">
+            Device Inventory
+        </a>
+    </div>
+
+    <app-feature-card title="Devices" description="Browse and monitor all devices registered to your organizations"
+        icon="bi-pc-display-horizontal">
+        <button card-actions type="button" (click)="openLinkDevice()"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#8a5a45] to-[#b98668] text-white text-sm font-semibold shadow-[0_4px_14px_rgba(185,134,104,0.18)] hover:-translate-y-0.5 hover:shadow-[0_7px_20px_rgba(185,134,104,0.25)] transition-all duration-200">
+
+            <i class="bi bi-plus-lg"></i>
+            Link Device
+        </button>
+
+        <!-- Device Toolbar -->
+        <div class="flex items-center gap-3 mb-6">
+
+            <!-- Search -->
+            <div class="relative flex-1 min-w-0">
+
+                <i class="bi bi-search absolute left-4 top-1/2 -translate-y-1/2 text-[#64748b]">
+                </i>
+
+                <input type="text" [(ngModel)]="searchText" placeholder="Search devices..." class="w-full h-11 pl-11 pr-4 rounded-xl
+                   bg-[#101827]
+                   border border-[rgba(185,134,104,0.14)]
+                   text-sm text-white
+                   placeholder:text-[#64748b]
+                   outline-none
+                   focus:border-[rgba(185,134,104,0.45)]
+                   focus:ring-2
+                   focus:ring-[rgba(185,134,104,0.08)]
+                   transition-all duration-200" />
+
+            </div>
+
+
+            <!-- Organization -->
+            <div class="w-52 shrink-0">
+
+                <app-dropdown [options]="organizationOptions" [value]="selectedOrganization"
+                    placeholder="All Organizations" (valueChange)="selectOrganization($event)">
+                </app-dropdown>
+
+            </div>
+
+
+            <!-- Status Filters -->
+            <div class="flex items-center gap-1 p-1
+               rounded-xl
+               bg-[#0b1220]
+               border border-[rgba(185,134,104,0.12)]
+               shrink-0">
+
+
+                <!-- All -->
+                <button type="button" (click)="setFilter('all')" [ngClass]="activeFilter === 'all'
+                ? 'bg-[#b98668] text-white shadow-[0_3px_10px_rgba(185,134,104,0.20)]'
+                : 'text-[#94a3b8] hover:text-white hover:bg-[rgba(185,134,104,0.08)]'" class="h-9 px-4 rounded-lg
+                   text-sm font-medium
+                   transition-all duration-200">
+
+                    All
+
+                </button>
+
+
+                <!-- Linked -->
+                <button type="button" (click)="setFilter('linked')" [ngClass]="activeFilter === 'linked'
+                ? 'bg-[#b98668] text-white shadow-[0_3px_10px_rgba(185,134,104,0.20)]'
+                : 'text-[#94a3b8] hover:text-white hover:bg-[rgba(185,134,104,0.08)]'" class="h-9 px-4 rounded-lg
+                   text-sm font-medium
+                   transition-all duration-200">
+
+                    Linked
+
+                </button>
+
+
+                <!-- Active -->
+                <button type="button" (click)="setFilter('active')" [ngClass]="activeFilter === 'active'
+                ? 'bg-[#b98668] text-white shadow-[0_3px_10px_rgba(185,134,104,0.20)]'
+                : 'text-[#94a3b8] hover:text-white hover:bg-[rgba(185,134,104,0.08)]'" class="h-9 px-4 rounded-lg
+                   text-sm font-medium
+                   transition-all duration-200">
+                    Active
+                </button>
+
+                <!-- Live -->
+                <button type="button" (click)="setFilter('live')" [ngClass]="activeFilter === 'live'
+                ? 'bg-[#b98668] text-white shadow-[0_3px_10px_rgba(185,134,104,0.20)]'
+                : 'text-[#94a3b8] hover:text-white hover:bg-[rgba(185,134,104,0.08)]'" class="h-9 px-4 rounded-lg
+                   text-sm font-medium
+                   transition-all duration-200">
+
+                    <span class="flex items-center gap-2">
+
+                        <span class="w-2 h-2 rounded-full
+                           bg-emerald-400
+                           shadow-[0_0_6px_rgba(52,211,153,0.6)]">
+                        </span>
+                        Live
+                    </span>
+
+                </button>
+
+            </div>
+
+
+            <!-- Toolbar Actions -->
+            <div class="flex items-center gap-2 shrink-0">
+
+                <!-- Refresh -->
+                <button type="button" (click)="refreshDevices()" title="Refresh devices" class="w-11 h-11
+                   rounded-xl
+                   border border-[rgba(185,134,104,0.12)]
+                   bg-[#101827]
+                   text-[#94a3b8]
+                   flex items-center justify-center
+                   hover:text-white
+                   hover:border-[rgba(185,134,104,0.3)]
+                   hover:bg-[#131e31]
+                   transition-all duration-200">
+
+                    <i class="bi bi-arrow-clockwise text-base"></i>
+
+                </button>
+
+
+                <!-- Filter -->
+                <button type="button" title="Filter devices" class="w-11 h-11
+                   rounded-xl
+                   border border-[rgba(185,134,104,0.12)]
+                   bg-[#101827]
+                   text-[#94a3b8]
+                   flex items-center justify-center
+                   hover:text-white
+                   hover:border-[rgba(185,134,104,0.3)]
+                   hover:bg-[#131e31]
+                   transition-all duration-200">
+
+                    <i class="bi bi-sliders2 text-base"></i>
+
+                </button>
+
+            </div>
+
+        </div>

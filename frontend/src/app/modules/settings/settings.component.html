@@ -1,0 +1,188 @@
+<div class="p-8">
+
+  <div class="flex items-start justify-between mb-6">
+
+    <app-page-header title="Settings" description="System preferences for this organization">
+    </app-page-header>
+
+    <div class="flex items-center gap-3">
+      <button type="button" (click)="resetChanges()" class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-medium
+             text-[#cbd5e1] bg-[#0d1424] border border-[rgba(185,134,104,0.16)]
+             hover:border-[rgba(185,134,104,0.3)] transition-colors">
+        <i class="bi bi-arrow-clockwise"></i>
+        Reset
+      </button>
+
+      <button type="button" (click)="saveChanges()" class="flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm font-semibold
+             text-white bg-gradient-to-br from-[#8a5a45] to-[#b98668]
+             shadow-[0_4px_14px_rgba(185,134,104,0.3)] hover:opacity-90 transition-opacity">
+        <i class="bi bi-save2"></i>
+        Save Changes
+      </button>
+    </div>
+  </div>
+
+  <div class="inline-flex p-1 rounded-xl bg-[#0d1424] border border-[rgba(185,134,104,0.12)] mb-6">
+    <button *ngFor="let tab of tabs" type="button" (click)="setTab(tab.id)"
+      class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-150" [ngClass]="activeTab === tab.id
+      ? 'bg-gradient-to-br from-[#8a5a45] to-[#b98668] text-white shadow-sm'
+      : 'text-[#94a3b8] hover:text-white'">
+      <i [class]="'bi ' + tab.icon"></i>
+      {{ tab.label }}
+    </button>
+  </div>
+
+  <div class="bg-[#0d1424] rounded-2xl border border-[rgba(185,134,104,0.12)]
+            shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-6">
+    <div *ngIf="activeTab === 'general'" class="flex flex-col">
+      <div class="flex items-center justify-between py-4 border-b border-[rgba(185,134,104,0.08)]">
+        <div>
+          <p class="text-sm font-medium text-[#e2e8f0]">Banner Carousel Interval</p>
+          <p class="text-xs text-[#64748b] mt-0.5">Time between banner transitions · min 6s</p>
+        </div>
+        <div class="relative w-36">
+          <input type="number" min="6" [(ngModel)]="bannerCarouselInterval" class="w-full h-11 pl-4 pr-10 rounded-xl bg-[#101827]
+                 border border-[rgba(185,134,104,0.16)] text-sm text-white text-right
+                 focus:outline-none focus:border-[#b98668]" />
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#64748b] pointer-events-none">sec</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between py-4 border-b border-[rgba(185,134,104,0.08)]">
+        <div>
+          <p class="text-sm font-medium text-[#e2e8f0]">Banner Video Idle Timeout</p>
+          <p class="text-xs text-[#64748b] mt-0.5">Inactivity before video autoplay · 5–300s</p>
+        </div>
+        <div class="relative w-36">
+          <input type="number" min="5" max="300" [(ngModel)]="bannerVideoIdleTimeout" class="w-full h-11 pl-4 pr-10 rounded-xl bg-[#101827]
+                 border border-[rgba(185,134,104,0.16)] text-sm text-white text-right
+                 focus:outline-none focus:border-[#b98668]" />
+          <span class="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-[#64748b] pointer-events-none">sec</span>
+        </div>
+      </div>
+
+      <div class="flex items-center justify-between py-4">
+        <div>
+          <p class="text-sm font-medium text-[#e2e8f0]">Banner Video Cycle Count</p>
+          <p class="text-xs text-[#64748b] mt-0.5">Loops before returning to images</p>
+        </div>
+        <div class="w-44">
+          <app-dropdown [options]="cycleCountOptions" [(value)]="bannerVideoCycleCount">
+          </app-dropdown>
+        </div>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'beta'" class="flex flex-col">
+      <div class="flex items-center justify-between py-4">
+        <div class="flex items-center gap-2">
+          <div>
+            <p class="text-sm font-medium text-[#e2e8f0]">Devices V2</p>
+            <p class="text-xs text-[#64748b] mt-0.5">Preview the new device experience for this org</p>
+          </div>
+          <i class="bi bi-info-circle text-[#64748b] text-xs cursor-help"
+            title="Adds a 'Try V2' pill on the Devices page and enables /dashboard/devices2/*. Shell only in this phase; global switch is off, so only this organisation sees it.">
+          </i>
+        </div>
+
+        <button type="button" role="switch" [attr.aria-checked]="devicesV2Enabled" (click)="toggleDevicesV2()"
+          class="shrink-0 relative w-11 h-6 rounded-full transition-colors duration-200"
+          [ngClass]="devicesV2Enabled ? 'bg-gradient-to-r from-[#8a5a45] to-[#b98668]' : 'bg-[#1e293b]'">
+          <span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200"
+            [ngClass]="devicesV2Enabled ? 'translate-x-5' : 'translate-x-0'">
+          </span>
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'device'" class="flex flex-col">
+      <div class="flex items-center justify-between py-4">
+        <div>
+          <p class="text-sm font-medium text-[#e2e8f0]">Auto Update for new devices</p>
+          <p class="text-xs text-[#64748b] mt-0.5">New devices default to Auto Update = ON</p>
+        </div>
+
+        <button type="button" role="switch" [attr.aria-checked]="autoUpdateAllNewDevices" (click)="toggleAutoUpdate()"
+          class="shrink-0 relative w-11 h-6 rounded-full transition-colors duration-200"
+          [ngClass]="autoUpdateAllNewDevices ? 'bg-gradient-to-r from-[#8a5a45] to-[#b98668]' : 'bg-[#1e293b]'">
+          <span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200"
+            [ngClass]="autoUpdateAllNewDevices ? 'translate-x-5' : 'translate-x-0'">
+          </span>
+        </button>
+      </div>
+
+      <div *ngIf="autoUpdateAllNewDevices" class="rounded-xl border border-[rgba(185,134,104,0.2)] bg-[rgba(185,134,104,0.06)]
+             px-5 py-4 flex items-center justify-between gap-4 mt-1 mb-4">
+        <label class="flex items-center gap-2 text-xs text-[#94a3b8] cursor-pointer">
+          <input type="checkbox" [(ngModel)]="includeSubOrganizations"
+            class="w-4 h-4 rounded accent-[#b98668] bg-[#0b1220] border border-[rgba(185,134,104,0.2)]" />
+          Apply to existing devices, including sub-organizations
+        </label>
+
+        <button type="button" (click)="applyToExistingDevices()" class="shrink-0 px-4 py-2 rounded-lg text-sm font-medium text-[#b98668]
+               border border-[rgba(185,134,104,0.35)] hover:bg-[rgba(185,134,104,0.1)] transition-colors">
+          Apply
+        </button>
+      </div>
+    </div>
+
+    <div *ngIf="activeTab === 'network'" class="flex flex-col">
+      <div class="flex items-center justify-between py-4 border-b border-[rgba(185,134,104,0.08)]">
+        <div>
+          <p class="text-sm font-medium text-[#e2e8f0]">Network Change Alerts</p>
+          <p class="text-xs text-[#64748b] mt-0.5">Flag devices connecting from unlisted IPs</p>
+        </div>
+
+        <button type="button" role="switch" [attr.aria-checked]="networkChangeAlertsEnabled"
+          (click)="toggleNetworkAlerts()" class="shrink-0 relative w-11 h-6 rounded-full transition-colors duration-200"
+          [ngClass]="networkChangeAlertsEnabled ? 'bg-gradient-to-r from-[#8a5a45] to-[#b98668]' : 'bg-[#1e293b]'">
+          <span class="absolute top-0.5 left-0.5 w-5 h-5 rounded-full bg-white shadow transition-transform duration-200"
+            [ngClass]="networkChangeAlertsEnabled ? 'translate-x-5' : 'translate-x-0'">
+          </span>
+        </button>
+      </div>
+
+      <div class="pt-4">
+        <div class="flex flex-col md:flex-row gap-3">
+          <input type="text" [(ngModel)]="newIp" placeholder="IP address" class="flex-1 h-11 bg-[#101827] border border-[rgba(185,134,104,0.16)] rounded-xl
+                 px-4 text-sm text-white placeholder:text-[#475569]
+                 focus:outline-none focus:border-[#b98668]" />
+
+          <input type="text" [(ngModel)]="newCidr" placeholder="CIDR" class="w-full md:w-28 h-11 bg-[#101827] border border-[rgba(185,134,104,0.16)] rounded-xl
+                 px-4 text-sm text-white placeholder:text-[#475569]
+                 focus:outline-none focus:border-[#b98668]" />
+
+          <input type="text" [(ngModel)]="newDescription" placeholder="Note (optional)" class="flex-1 h-11 bg-[#101827] border border-[rgba(185,134,104,0.16)] rounded-xl
+                 px-4 text-sm text-white placeholder:text-[#475569]
+                 focus:outline-none focus:border-[#b98668]" />
+
+          <button type="button" (click)="addAllowedIp()" class="shrink-0 h-11 px-5 rounded-xl text-sm font-semibold text-white
+                 bg-gradient-to-br from-[#8a5a45] to-[#b98668] hover:opacity-90 transition-opacity">
+            Add
+          </button>
+        </div>
+
+        <p *ngIf="allowedIps.length === 0" class="text-xs text-[#64748b] mt-4">
+          No allowed IPs yet — checking is disabled until you add one.
+        </p>
+
+        <div *ngIf="allowedIps.length > 0" class="flex flex-col mt-4 divide-y divide-[rgba(185,134,104,0.08)]">
+          <div *ngFor="let entry of allowedIps; let i = index" class="flex items-center justify-between py-2.5">
+            <div class="flex items-center gap-3 text-sm">
+              <span class="text-[#e2e8f0] font-medium">
+                {{ entry.ip }}<span *ngIf="entry.cidr">/{{ entry.cidr }}</span>
+              </span>
+              <span *ngIf="entry.description" class="text-xs text-[#64748b]">{{ entry.description }}</span>
+            </div>
+            <button type="button" (click)="removeAllowedIp(i)"
+              class="text-[#64748b] hover:text-[#ef4444] transition-colors">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+</div>

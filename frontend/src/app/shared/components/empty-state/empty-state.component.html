@@ -1,0 +1,57 @@
+<div
+    class="min-h-[360px]
+           flex flex-col
+           items-center justify-center
+           border border-dashed
+           border-[rgba(185,134,104,0.12)]
+           rounded-xl
+           bg-[#0b1220]/40">
+
+    <!-- Empty Icon -->
+
+    <div
+        class="w-16 h-16
+               rounded-2xl
+               bg-[rgba(185,134,104,0.07)]
+               border border-[rgba(185,134,104,0.12)]
+               flex items-center justify-center
+               mb-5">
+
+        <i
+            [class]="'bi ' + icon + ' text-3xl text-[#64748b]'">
+        </i>
+
+    </div>
+
+
+    <!-- Title -->
+
+    <h3
+        class="text-sm font-semibold text-[#cbd5e1]">
+
+        {{ title }}
+
+    </h3>
+
+
+    <!-- Description -->
+
+    <p
+        *ngIf="description"
+        class="text-xs text-[#64748b]
+               mt-2
+               text-center
+               max-w-sm">
+
+        {{ description }}
+
+    </p>
+
+
+    <!-- Optional action -->
+
+    <div class="mt-5">
+        <ng-content></ng-content>
+    </div>
+
+</div>

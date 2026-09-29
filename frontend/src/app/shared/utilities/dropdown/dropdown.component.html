@@ -1,0 +1,49 @@
+<div class="w-full">
+    <!-- Label -->
+    <label *ngIf="label" class="block text-sm font-semibold text-[#e2e8f0] mb-1.5">
+        {{ label }}
+    </label>
+    <!-- Dropdown -->
+    <div class="relative w-full">
+        <!-- Selected value -->
+        <button type="button" [disabled]="disabled" (click)="toggleDropdown($event)" class="w-full h-11 px-4 rounded-xl border
+                   bg-[#101827]
+                   text-sm text-left
+                   outline-none
+                   flex items-center justify-between
+                   transition-all duration-200" [ngClass]="isOpen
+                ? 'border-[#b98668] ring-2 ring-[rgba(185,134,104,0.12)] bg-[#131e31]'
+                : 'border-[rgba(185,134,104,0.16)] hover:border-[#b98668] hover:bg-[#131e31]'">
+
+
+            <span [ngClass]="getSelectedLabel()
+                    ? 'text-[#e2e8f0]'
+                    : 'text-[#64748b]'">
+                {{ getSelectedLabel() || placeholder }}
+            </span>
+
+                        <i class="bi bi-chevron-down text-[#b98668] text-sm transition-transform duration-200"
+                [ngClass]="isOpen ? 'rotate-180' : ''">
+            </i>
+        </button>
+
+        <!-- Dropdown options -->
+        <div *ngIf="isOpen" class="absolute left-0 right-0 top-full mt-2 z-[3000]
+                   bg-[#101827]
+                   border border-[rgba(185,134,104,0.18)]
+                   rounded-xl
+                   shadow-[0_12px_35px_rgba(0,0,0,0.55)]
+                   overflow-hidden
+                   animate-dropdown">
+
+            <button *ngFor="let option of options" type="button" (click)="selectOption(option, $event)" class="w-full px-4 py-3 text-left text-sm
+                       transition-all duration-150" [ngClass]="option.value === value
+                    ? 'bg-[rgba(185,134,104,0.16)] text-[#d9a988] font-semibold'
+                    : 'text-[#cbd5e1] hover:bg-[rgba(185,134,104,0.08)] hover:text-white'">
+
+                {{ option.label }}
+            </button>
+        </div>
+    </div>
+</div>
+

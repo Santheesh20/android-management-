@@ -1,0 +1,434 @@
+<div class="p-8">
+
+    <!-- Page Header -->
+    <app-page-header title="Device Inventory" description="Manage and assign devices available in your inventory">
+    </app-page-header>
+
+
+    <!-- Inventory Toolbar -->
+    <div class="flex items-center justify-between gap-6 mb-6">
+
+        <!-- Inventory Context -->
+        <div class="flex items-center gap-3 min-w-0">
+
+            <div class="w-10 h-10 rounded-xl
+                       bg-gradient-to-br from-[#8a5a45] to-[#b98668]
+                       flex items-center justify-center
+                       text-white shadow-md shrink-0">
+
+                <i class="bi bi-box-seam text-lg"></i>
+
+            </div>
+
+            <div class="min-w-0">
+
+                <p class="text-sm font-semibold text-white">
+                    Inventory
+                </p>
+
+                <p class="text-xs text-[#94a3b8] mt-0.5 truncate">
+                    Innolens Media and Broadcasting Limited
+                    <span class="text-[#64748b] mx-1">•</span>
+                    Reseller
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <!-- Inventory Actions -->
+        <div class="flex items-center gap-2 shrink-0">
+
+            <!-- Serial Number -->
+            <div class="relative">
+
+                <i class="bi bi-upc-scan
+                           absolute left-3 top-1/2
+                           -translate-y-1/2
+                           text-[#64748b]">
+                </i>
+
+                <input type="text" placeholder="Enter serial number..." class="w-52 h-10
+                           pl-9 pr-3
+                           rounded-xl
+                           bg-[#101827]
+                           border border-[rgba(185,134,104,0.14)]
+                           text-sm text-[#e2e8f0]
+                           placeholder:text-[#64748b]
+                           outline-none
+                           focus:border-[rgba(185,134,104,0.45)]
+                           focus:ring-2
+                           focus:ring-[rgba(185,134,104,0.08)]
+                           transition-all duration-200" />
+
+            </div>
+
+
+            <!-- Add Device -->
+            <button type="button" class="h-10 px-4
+                       rounded-xl
+                       bg-gradient-to-r from-[#8a5a45] to-[#b98668]
+                       text-white
+                       text-sm font-semibold
+                       whitespace-nowrap
+                       shadow-[0_4px_14px_rgba(185,134,104,0.18)]
+                       hover:-translate-y-0.5
+                       hover:shadow-[0_7px_20px_rgba(185,134,104,0.25)]
+                       transition-all duration-200">
+
+                <span class="flex items-center gap-2">
+                    <i class="bi bi-plus-lg"></i>
+                    Add Device
+                </span>
+
+            </button>
+
+
+            <!-- Bulk Assignment -->
+            <button type="button" class="h-10 px-4
+                       rounded-xl
+                       border border-[rgba(185,134,104,0.45)]
+                       bg-[rgba(185,134,104,0.06)]
+                       text-[#d9a988]
+                       text-sm font-semibold
+                       whitespace-nowrap
+                       hover:bg-[rgba(185,134,104,0.12)]
+                       hover:text-white
+                       transition-all duration-200">
+
+                <span class="flex items-center gap-2">
+                    <i class="bi bi-upload"></i>
+                    Bulk Assignment
+                </span>
+
+            </button>
+
+
+            <!-- Assign Devices -->
+            <button type="button" disabled class="h-10 px-4
+                       rounded-xl
+                       border border-[rgba(148,163,184,0.18)]
+                       bg-[#151e2d]
+                       text-[#94a3b8]
+                       text-sm font-semibold
+                       whitespace-nowrap
+                       cursor-not-allowed">
+
+                <span class="flex items-center gap-2">
+
+                    <i class="bi bi-send text-[#64748b]"></i>
+
+                    Assign Devices (0)
+
+                </span>
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <!-- Inventory Summary -->
+    <div class="grid grid-cols-4 gap-4 mb-6">
+
+
+        <!-- Total Devices -->
+        <div class="rounded-xl
+                   bg-[#0d1424]
+                   border border-[rgba(185,134,104,0.12)]
+                   p-4
+                   transition-all duration-200
+                   hover:border-[rgba(185,134,104,0.22)]">
+
+            <p class="text-xs text-[#64748b]">
+                Total Devices
+            </p>
+
+            <p class="text-xl font-bold text-white mt-1">
+                {{ totalDevices }}
+            </p>
+
+        </div>
+
+
+        <!-- Available -->
+        <div class="rounded-xl
+                   bg-[#0d1424]
+                   border border-emerald-500/20
+                   p-4
+                   transition-all duration-200
+                   hover:border-emerald-500/30">
+
+            <div class="flex items-center justify-between">
+
+                <p class="text-xs text-[#64748b]">
+                    Available
+                </p>
+
+                <span class="w-7 h-7 rounded-lg
+                           bg-emerald-500/10
+                           text-emerald-400
+                           flex items-center justify-center">
+
+                    <i class="bi bi-check-circle"></i>
+
+                </span>
+
+            </div>
+
+            <p class="text-xl font-bold text-emerald-400 mt-1">
+                {{ availableDevices }}
+            </p>
+
+        </div>
+
+
+        <!-- Assigned -->
+        <div class="rounded-xl
+                   bg-[#0d1424]
+                   border border-blue-500/20
+                   p-4
+                   transition-all duration-200
+                   hover:border-blue-500/30">
+
+            <div class="flex items-center justify-between">
+
+                <p class="text-xs text-[#64748b]">
+                    Assigned
+                </p>
+
+                <span class="w-7 h-7 rounded-lg
+                           bg-blue-500/10
+                           text-blue-400
+                           flex items-center justify-center">
+
+                    <i class="bi bi-link-45deg"></i>
+
+                </span>
+
+            </div>
+
+            <p class="text-xl font-bold text-blue-400 mt-1">
+                {{ assignedDevices }}
+            </p>
+        </div>
+
+        <!-- In Use -->
+        <div class="rounded-xl
+                   bg-[#0d1424]
+                   border border-purple-500/20
+                   p-4
+                   transition-all duration-200
+                   hover:border-purple-500/30">
+
+            <div class="flex items-center justify-between">
+
+                <p class="text-xs text-[#64748b]">
+                    In Use
+                </p>
+
+                <span class="w-7 h-7 rounded-lg
+                           bg-purple-500/10
+                           text-purple-400
+                           flex items-center justify-center">
+
+                    <i class="bi bi-tv"></i>
+
+                </span>
+
+            </div>
+
+            <p class="text-xl font-bold text-purple-400 mt-1">
+                {{ inUseDevices }}
+            </p>
+
+        </div>
+    </div>
+
+    <!-- Inventory Table Card -->
+    <app-feature-card title="Inventory Devices" description="Browse, search and manage devices in your inventory"
+        icon="bi-box-seam">
+
+        <!-- Search + Filters -->
+        <div class="flex items-center gap-3 mb-5">
+            <!-- Search -->
+            <div class="relative flex-1 min-w-0">
+
+                <i class="bi bi-search absolute left-4 top-1/2
+                           -translate-y-1/2 text-[#64748b]">
+                </i>
+
+                <input type="text" [(ngModel)]="searchText" placeholder="Search by serial number..." class="w-full h-11
+                           pl-11 pr-4
+                           rounded-xl
+                           bg-[#101827]
+                           border border-[rgba(185,134,104,0.14)]
+                           text-sm text-white
+                           placeholder:text-[#64748b]
+                           outline-none
+                           focus:border-[rgba(185,134,104,0.45)]
+                           focus:ring-2
+                           focus:ring-[rgba(185,134,104,0.08)]
+                           transition-all duration-200" />
+            </div>
+
+            <!-- Status -->
+            <div class="w-40 shrink-0">
+
+                <app-dropdown [options]="[
+                        { label: 'All Status', value: 'all' },
+                        { label: 'Available', value: 'available' },
+                        { label: 'Assigned', value: 'assigned' },
+                        { label: 'In Use', value: 'in-use' }
+                    ]" [value]="activeStatus" placeholder="All Status">
+                </app-dropdown>
+
+            </div>
+
+
+            <!-- Tier -->
+            <div class="w-40 shrink-0">
+
+                <app-dropdown [options]="[
+                        { label: 'All Tiers', value: 'all' },
+                        { label: 'Reseller', value: 'reseller' },
+                        { label: 'Customer', value: 'customer' }
+                    ]" [value]="selectedTier" placeholder="All Tiers">
+                </app-dropdown>
+
+            </div>
+
+
+            <!-- Organization -->
+            <div class="w-48 shrink-0">
+
+                <app-dropdown [options]="[
+                        { label: 'All Organizations', value: 'all' }
+                    ]" [value]="selectedOrganization" placeholder="All Organizations">
+                </app-dropdown>
+
+            </div>
+
+        </div>
+
+
+        <!-- Empty Inventory -->
+        <app-empty-state *ngIf="totalDevices === 0" icon="bi-box-seam" title="No inventory devices found"
+            description="There are no devices available in the inventory yet. Add a device to get started.">
+        </app-empty-state>
+
+
+        <!-- Inventory Table -->
+        <div *ngIf="totalDevices > 0" class="overflow-x-auto rounded-xl
+                   border border-[rgba(185,134,104,0.12)]">
+
+            <table class="w-full text-sm">
+
+                <thead>
+
+                    <tr class="text-left
+                               text-[#64748b]
+                               bg-[#101827]
+                               border-b
+                               border-[rgba(185,134,104,0.12)]">
+
+                        <th class="px-4 py-3">
+                            <input type="checkbox" class="w-4 h-4 accent-[#b98668]" />
+                        </th>
+
+                        <th class="px-4 py-3 font-medium"> Select All </th>
+
+                        <th class="px-4 py-3 font-medium"> Serial Number </th>
+
+                        <th class="px-4 py-3 font-medium"> Status </th>
+
+                        <th class="px-4 py-3 font-medium"> First Online </th>
+
+                        <th class="px-4 py-3 font-medium"> Assigned Type</th>
+
+                        <th class="px-4 py-3 font-medium">Assigned Organization </th>
+
+                        <th class="px-4 py-3 font-medium"> Assigned Date</th>
+
+                        <th class="px-4 py-3 font-medium">Original Owner</th>
+
+                        <th class="px-4 py-3 font-medium">Warranty</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr class="border-b
+                               border-[rgba(185,134,104,0.08)]
+                               hover:bg-[rgba(185,134,104,0.05)]
+                               transition-colors">
+
+                        <td colspan="10" class="px-4 py-10 text-center">
+                            <div class="flex flex-col items-center">
+                                <span class="w-10 h-10 rounded-xl
+                                           bg-[#101827]
+                                           border
+                                           border-[rgba(185,134,104,0.12)]
+                                           flex items-center justify-center
+                                           text-[#64748b]">
+
+                                    <i class="bi bi-box-seam text-lg"></i>
+                                </span>
+
+                                <p class="text-sm text-[#94a3b8] mt-3">
+                                    No inventory data available
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Pagination -->
+        <div *ngIf="totalDevices > 0" class="flex items-center justify-between
+                   pt-4 mt-4
+                   border-t border-[rgba(185,134,104,0.08)]">
+
+            <div class="text-xs text-[#64748b]">
+                Showing 0 to 0 of 0 devices
+            </div>
+
+            <div class="flex items-center gap-2">
+
+                <span class="text-xs text-[#64748b]">Per page</span>
+
+                <button type="button" class="h-8 px-3 rounded-lg
+                           bg-[#101827]
+                           border border-[rgba(185,134,104,0.12)]
+                           text-xs text-[#94a3b8]">
+                    50
+                    <i class="bi bi-chevron-down ml-1"></i>
+                </button>
+
+                <button type="button" disabled class="w-8 h-8 rounded-lg
+                           bg-[#101827]
+                           border border-[rgba(185,134,104,0.10)]
+                           text-[#475569]
+                           cursor-not-allowed">
+                    <i class="bi bi-chevron-left"></i>
+                </button>
+
+                <span class="text-xs text-[#94a3b8] px-2">
+                    Page 1 of 1
+                </span>
+                <button type="button" disabled class="w-8 h-8 rounded-lg
+                           bg-[#101827]
+                           border border-[rgba(185,134,104,0.10)]
+                           text-[#475569]
+                           cursor-not-allowed">
+
+                    <i class="bi bi-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+    </app-feature-card>
+
+
+</div>

@@ -1,0 +1,44 @@
+<div class="group
+           bg-[#0d1424]
+           rounded-2xl
+           border border-[rgba(185,134,104,0.12)]
+           shadow-[0_4px_16px_rgba(0,0,0,0.3)]
+           p-6
+           transition-all duration-300
+           hover:border-[rgba(185,134,104,0.22)]">
+
+    <!-- Card Header -->
+
+    <div class="flex items-center justify-between mb-6">
+
+        <div>
+            <h2 class="text-lg font-semibold text-white
+                       flex items-center gap-2">
+                <span class="w-9 h-9 rounded-lg
+                           bg-gradient-to-br
+                           from-[#8a5a45]
+                           to-[#b98668]
+                           flex items-center justify-center
+                           text-white
+                           shadow-md
+                           shrink-0">
+                    <i [class]="'bi ' + icon"></i>
+
+                </span>
+                {{ title }}
+            </h2>
+
+            <p *ngIf="description" class="text-xs text-[#64748b]
+                       mt-1 ml-11">
+                {{ description }}
+            </p>
+        </div>
+
+        <div>
+            <ng-content select="[card-actions]"></ng-content>
+        </div>
+    </div>
+
+    <ng-content></ng-content>
+
+</div>

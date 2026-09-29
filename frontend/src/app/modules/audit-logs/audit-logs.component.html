@@ -1,0 +1,70 @@
+<div class="p-8">
+
+    <app-page-header title="Audit Logs" description="Track all user activities and system events">
+    </app-page-header>
+
+    <!-- Stat cards -->
+    <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <div *ngFor="let stat of stats"
+            class="group bg-[#0d1424] rounded-2xl border border-[rgba(185,134,104,0.12)] shadow-[0_4px_16px_rgba(0,0,0,0.3)] p-5 flex items-center gap-3 transition-all duration-300 hover:-translate-y-1 hover:shadow-[0_10px_28px_rgba(0,0,0,0.4)]"
+            [ngClass]="stat.hoverBorder">
+
+            <span
+                class="w-11 h-11 rounded-xl flex items-center justify-center shrink-0 transition-transform duration-300 group-hover:scale-110 border"
+                [ngClass]="[stat.iconBg, stat.iconBorder, stat.iconColor]">
+                <i class="bi {{ stat.icon }} text-lg"></i>
+            </span>
+
+            <div>
+                <p class="text-xs text-[#94a3b8]">{{ stat.label }}</p>
+                <p class="text-xl font-bold text-white mt-0.5">{{ stat.value }}</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Feature card: filters + table together, like Organizations -->
+    <app-feature-card title="Audit Log Records" description="Detailed history of all system and user activity"
+        icon="bi-journal-text">
+
+        <button card-actions type="button" (click)="exportCSV()"
+            class="flex items-center gap-2 px-4 py-2.5 rounded-xl bg-gradient-to-r from-[#8a5a45] to-[#b98668] text-white text-sm font-semibold shadow-[0_4px_14px_rgba(185,134,104,0.18)] hover:-translate-y-0.5 hover:shadow-[0_7px_20px_rgba(185,134,104,0.25)] transition-all duration-200">
+            <i class="bi bi-download"></i>
+            Export CSV
+        </button>
+
+        <!-- Filters -->
+        <div class="grid grid-cols-5 gap-4 mb-6">
+            <div class="relative">
+                <i class="bi bi-search absolute left-3.5 top-1/2 -translate-y-1/2 text-[#64748b] text-sm"></i>
+                <input type="text" [(ngModel)]="searchTerm" placeholder="Search by user, resource, description..."
+                    class="w-full bg-[#0b1220] border border-[rgba(185,134,104,0.15)] rounded-lg pl-10 pr-4 py-2.5 text-sm text-[#e2e8f0] placeholder-[#64748b] focus:outline-none focus:border-[rgba(185,134,104,0.5)] transition-colors" />
+            </div>
+
+            <app-dropdown [options]="categoryOptions" [value]="category" (valueChange)="onCategoryChange($event)">
+            </app-dropdown>
+
+            <app-dropdown [options]="actionOptions" [value]="action" (valueChange)="onActionChange($event)">
+            </app-dropdown>
+
+            <input type="date" [(ngModel)]="dateFrom"
+                class="w-full bg-[#0b1220] border border-[rgba(185,134,104,0.15)] rounded-lg px-4 py-2.5 text-sm text-[#e2e8f0] focus:outline-none focus:border-[rgba(185,134,104,0.5)] transition-colors [color-scheme:dark]" />
+
+            <input type="date" [(ngModel)]="dateTo"
+                class="w-full bg-[#0b1220] border border-[rgba(185,134,104,0.15)] rounded-lg px-4 py-2.5 text-sm text-[#e2e8f0] focus:outline-none focus:border-[rgba(185,134,104,0.5)] transition-colors [color-scheme:dark]" />
+
+        </div>
+
+        <!-- Table -->
+        <div class="overflow-x-auto">
+            <app-data-table *ngIf="filteredLogs.length; else noLogs" [columns]="columns" [data]="filteredLogs">
+            </app-data-table>
+        </div>
+
+        <ng-template #noLogs>
+            <app-empty-state icon="bi-journal-text" title="No audit logs found"
+                description="Try adjusting your filters or search term.">
+            </app-empty-state>
+        </ng-template>
+    </app-feature-card>
+
+</div>

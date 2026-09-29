@@ -1,0 +1,49 @@
+<table class="w-full text-sm">
+  <thead>
+    <tr class="text-left text-[#64748b] border-b border-[rgba(185,134,104,0.12)]">
+      <th *ngFor="let col of columns" class="py-2.5 font-medium">{{ col.label }}</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let row of data"
+      class="border-b border-[rgba(185,134,104,0.08)] hover:bg-[rgba(185,134,104,0.05)] transition-colors">
+      <td *ngFor="let col of columns" class="py-3.5">
+
+        <ng-container [ngSwitch]="col.type">
+
+          <span *ngSwitchCase="'status'" class="flex items-center gap-2 text-[#94a3b8]">
+            <span class="w-2 h-2 rounded-full" [ngClass]="getStatusDotClass(row[col.key])"></span>
+            {{ row[col.key] }}
+          </span>
+
+          <span *ngSwitchCase="'badge'"
+            class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium"
+            [ngClass]="getBadgeClass(row[col.key])">
+            <i *ngIf="getBadgeIcon(row[col.key])" class="bi" [ngClass]="getBadgeIcon(row[col.key])"></i>
+            {{ row[col.key] }}
+          </span>
+
+          <span *ngSwitchCase="'link'"
+            class="text-[#d9a988] font-medium hover:text-white cursor-pointer transition-colors">
+            {{ row[col.key] }}
+          </span>
+
+          <div *ngSwitchCase="'stacked'">
+            <p class="text-[#e2e8f0] font-medium">{{ row[col.key]?.main }}</p>
+            <p *ngIf="row[col.key]?.sub" class="text-xs text-[#64748b] mt-0.5">{{ row[col.key]?.sub }}</p>
+          </div>
+
+          <div *ngSwitchCase="'chevron'" class="flex justify-end pr-1">
+            <i class="bi bi-chevron-down text-[#64748b] text-xs"></i>
+          </div>
+
+          <span *ngSwitchDefault class="text-[#cbd5e1]">
+            {{ row[col.key] }}
+          </span>
+
+        </ng-container>
+
+      </td>
+    </tr>
+  </tbody>
+</table>

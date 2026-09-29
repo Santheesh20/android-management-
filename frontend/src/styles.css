@@ -1,0 +1,29 @@
+@import "tailwindcss";
+
+:root {
+  /* Bronze / accent tones (logo, active states, buttons) */
+  --tvmax-bronze-light: #d9a988;
+  --tvmax-bronze: #b98668;
+  --tvmax-bronze-dark: #8a5a45;
+  --tvmax-brown-dark: #6b4535;
+
+  /* Navy tones (sidenav + header background) */
+  --tvmax-navy-bg: #0f172a;
+  --tvmax-navy-panel: #1e293b;
+  --tvmax-navy-border: #2b3a52;
+
+  /* Text */
+  --tvmax-text-light: #f1f5f9;
+  --tvmax-text-muted: #94a3b8;
+
+  /* Light content area (dashboard background, cards) */
+  --tvmax-content-bg: #f4efec;
+  --tvmax-border: #e6ddd6;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: 'Segoe UI', Roboto, Arial, sans-serif;
+}
