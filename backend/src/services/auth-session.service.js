@@ -3,8 +3,11 @@ const RefreshSession = require('../models/refresh-session.model');
 async function createRefreshSession(data) {
     const session = await RefreshSession.create({
         userId: data.userId,
+
         familyId: data.familyId,
+
         tokenId: data.tokenId,
+
         expiresAt: data.expiresAt
     });
 
@@ -21,8 +24,12 @@ async function revokeRefreshSession(
     tokenId,
     replacedByTokenId
 ) {
+    const now = new Date();
+
     const update = {
-        revokedAt: new Date()
+        revokedAt: now,
+
+        lastUsedAt: now
     };
 
     if (replacedByTokenId) {
@@ -33,6 +40,7 @@ async function revokeRefreshSession(
     return RefreshSession.findOneAndUpdate(
         {
             tokenId: tokenId,
+
             revokedAt: null
         },
         {
@@ -68,6 +76,23 @@ async function revokeRefreshSessionFamily(
     return RefreshSession.updateMany(
         {
             familyId: familyId,
+
+            revokedAt: null
+        },
+        {
+            $set: {
+                revokedAt: new Date()
+            }
+        }
+    );
+}
+
+async function revokeRefreshSessionsForUser(
+    userId
+) {
+    return RefreshSession.updateMany(
+        {
+            userId: userId,
             revokedAt: null
         },
         {
@@ -80,8 +105,14 @@ async function revokeRefreshSessionFamily(
 
 module.exports = {
     createRefreshSession,
+
     findRefreshSession,
+
     revokeRefreshSession,
+
     updateRefreshSessionLastUsed,
-    revokeRefreshSessionFamily
+
+    revokeRefreshSessionFamily,
+
+    revokeRefreshSessionsForUser
 };
