@@ -1,0 +1,173 @@
+<div class="p-6">
+
+  <!-- Page heading -->
+ <!-- after -->
+<div class="mb-6 flex items-center gap-4">
+  <span class="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#8a5a45] to-[#b98668] text-lg text-white shadow-[0_6px_18px_-8px_rgba(185,134,104,0.7)]">
+    <i class="bi bi-person-circle"></i>
+  </span>
+  <div>
+    <h1 class="text-2xl font-semibold text-white">Profile</h1>
+    <p class="mt-0.5 text-sm text-[#94a3b8]">Manage your account information and security</p>
+  </div>
+</div>
+
+  <!-- Success message -->
+  <div *ngIf="successMessage" role="status"
+       class="mb-6 flex items-center gap-2 rounded-lg border border-emerald-500/30 bg-emerald-500/10 px-4 py-3 text-sm text-emerald-300">
+    <i class="bi bi-check-circle"></i>
+    {{ successMessage }}
+  </div>
+
+  <!-- Must change password -->
+  <div *ngIf="user?.mustChangePassword" role="alert"
+       class="mb-6 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[rgba(185,134,104,0.35)] bg-[rgba(185,134,104,0.10)] px-4 py-3 text-sm text-[#e5cdbf]">
+    <span class="flex items-center gap-2">
+      <i class="bi bi-exclamation-triangle text-[#b98668]"></i>
+      Your administrator requires you to change your password.
+    </span>
+    <button type="button" (click)="openModal()"
+            class="rounded-md bg-[rgba(185,134,104,0.2)] px-3 py-1 font-medium text-white transition-colors hover:bg-[rgba(185,134,104,0.35)]">
+      Change password
+    </button>
+  </div>
+
+  <div *ngIf="user" class="grid gap-6 lg:grid-cols-3">
+
+    <!-- Identity card -->
+    <div class="flex flex-col items-center justify-center rounded-2xl border border-[rgba(185,134,104,0.12)] bg-[#0d1424] p-8 text-center shadow-[0_4px_16px_rgba(0,0,0,0.3)] lg:col-span-1">
+      <div class="avatar flex h-24 w-24 items-center justify-center rounded-full bg-gradient-to-br from-[#1c2540] to-[#b98668] text-4xl font-semibold text-white shadow-[0_0_0_1px_rgba(185,134,104,0.35)]">
+        {{ initial }}
+      </div>
+      <h2 class="mt-5 text-xl font-semibold text-white">{{ user.username }}</h2>
+      <span class="mt-2 inline-flex items-center gap-1.5 rounded-full border border-[rgba(185,134,104,0.25)] bg-[rgba(185,134,104,0.10)] px-3 py-1 text-xs font-medium text-[#e5cdbf]">
+        <i class="bi bi-shield-check"></i>
+        {{ user.role.name }}
+      </span>
+    </div>
+
+    <!-- Account information -->
+    <div class="lg:col-span-2">
+      <app-feature-card title="Account Information" description="Details linked to your sign-in" icon="bi-person">
+        <dl class="grid gap-5 sm:grid-cols-2">
+          <div class="rounded-lg border border-[rgba(185,134,104,0.10)] bg-[#0a0e1a] px-4 py-3">
+            <dt class="text-xs text-[#64748b]">Username</dt>
+            <dd class="mt-1 break-all text-sm text-[#e5e7eb]">{{ user.username }}</dd>
+          </div>
+          <div class="rounded-lg border border-[rgba(185,134,104,0.10)] bg-[#0a0e1a] px-4 py-3">
+            <dt class="text-xs text-[#64748b]">Role</dt>
+            <dd class="mt-1 text-sm text-[#e5e7eb]">{{ user.role.name }}</dd>
+          </div>
+          <div class="rounded-lg border border-[rgba(185,134,104,0.10)] bg-[#0a0e1a] px-4 py-3 sm:col-span-2">
+            <dt class="text-xs text-[#64748b]">Email</dt>
+            <dd class="mt-1 break-all text-sm text-[#e5e7eb]">{{ user.email }}</dd>
+          </div>
+        </dl>
+      </app-feature-card>
+    </div>
+
+    <!-- Security -->
+    <div class="lg:col-span-3">
+      <app-feature-card title="Security" description="Keep your account protected" icon="bi-shield-lock">
+        <div class="flex flex-wrap items-center justify-between gap-4 rounded-lg border border-[rgba(185,134,104,0.10)] bg-[#0a0e1a] px-4 py-4">
+          <div>
+            <p class="text-sm font-medium text-[#e5e7eb]">Password</p>
+            <p class="mt-1 text-xs text-[#64748b]">Use a strong password that you don't use anywhere else.</p>
+          </div>
+          <button type="button" (click)="openModal()" class="btn-bronze">
+            <i class="bi bi-key"></i>
+            Change password
+          </button>
+        </div>
+      </app-feature-card>
+    </div>
+  </div>
+</div>
+
+<!-- ============ Change password modal ============ -->
+<div *ngIf="showModal"
+     class="backdrop fixed inset-0 z-[2000] flex items-center justify-center bg-black/70 p-4"
+     (click)="closeModal()">
+
+  <div class="modal w-full max-w-md rounded-2xl border border-[rgba(185,134,104,0.2)] bg-[#0d1424] p-6 shadow-[0_24px_60px_rgba(0,0,0,0.6)]"
+       role="dialog" aria-modal="true" aria-labelledby="pwd-title"
+       (click)="$event.stopPropagation()">
+
+    <div class="flex items-start justify-between">
+      <div>
+        <h3 id="pwd-title" class="text-lg font-semibold text-white">Change password</h3>
+        <p class="mt-1 text-xs text-[#64748b]">Use at least 8 characters.</p>
+      </div>
+      <button type="button" (click)="closeModal()" aria-label="Close"
+              class="text-[#64748b] transition-colors hover:text-white">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <div *ngIf="errorMessage" role="alert"
+         class="mt-4 rounded-lg border border-red-500/30 bg-red-500/10 px-3 py-2 text-sm text-red-300">
+      {{ errorMessage }}
+    </div>
+
+    <form [formGroup]="form" (ngSubmit)="submitPassword()" novalidate class="mt-5 space-y-4">
+
+      <!-- Current -->
+      <div>
+        <label for="cur" class="mb-1.5 block text-sm text-[#cbd5e1]">Current password</label>
+        <div class="relative">
+          <input id="cur" [type]="show.current ? 'text' : 'password'" formControlName="currentPassword"
+                 autocomplete="current-password" class="pwd-field"
+                 [class.pwd-error]="currentPassword.touched && currentPassword.invalid" />
+          <button type="button" (click)="show.current = !show.current" class="eye"
+                  [attr.aria-label]="show.current ? 'Hide password' : 'Show password'">
+            <i class="bi" [ngClass]="show.current ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+        <p *ngIf="currentPassword.touched && currentPassword.hasError('required')" class="msg">Enter your current password.</p>
+      </div>
+
+      <!-- New -->
+      <div>
+        <label for="new" class="mb-1.5 block text-sm text-[#cbd5e1]">New password</label>
+        <div class="relative">
+          <input id="new" [type]="show.next ? 'text' : 'password'" formControlName="newPassword"
+                 autocomplete="new-password" class="pwd-field"
+                 [class.pwd-error]="newPassword.touched && newPassword.invalid" />
+          <button type="button" (click)="show.next = !show.next" class="eye"
+                  [attr.aria-label]="show.next ? 'Hide password' : 'Show password'">
+            <i class="bi" [ngClass]="show.next ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+        <p *ngIf="newPassword.touched && newPassword.hasError('required')" class="msg">Enter a new password.</p>
+        <p *ngIf="newPassword.touched && newPassword.hasError('minlength')" class="msg">Password must be at least 8 characters.</p>
+      </div>
+
+      <!-- Confirm -->
+      <div>
+        <label for="conf" class="mb-1.5 block text-sm text-[#cbd5e1]">Confirm new password</label>
+        <div class="relative">
+          <input id="conf" [type]="show.confirm ? 'text' : 'password'" formControlName="confirmPassword"
+                 autocomplete="new-password" class="pwd-field"
+                 [class.pwd-error]="confirmPassword.touched && (confirmPassword.invalid || form.hasError('mismatch'))" />
+          <button type="button" (click)="show.confirm = !show.confirm" class="eye"
+                  [attr.aria-label]="show.confirm ? 'Hide password' : 'Show password'">
+            <i class="bi" [ngClass]="show.confirm ? 'bi-eye-slash' : 'bi-eye'"></i>
+          </button>
+        </div>
+        <p *ngIf="confirmPassword.touched && confirmPassword.hasError('required')" class="msg">Re-enter your new password.</p>
+        <p *ngIf="confirmPassword.touched && form.hasError('mismatch')" class="msg">The two passwords don't match.</p>
+      </div>
+
+      <div class="flex justify-end gap-3 pt-2">
+        <button type="button" (click)="closeModal()" [disabled]="saving"
+                class="rounded-lg border border-[rgba(185,134,104,0.2)] px-4 py-2 text-sm text-[#cbd5e1] transition-colors hover:bg-[rgba(185,134,104,0.10)] disabled:opacity-60">
+          Cancel
+        </button>
+        <button type="submit" [disabled]="saving" class="btn-bronze">
+          <i *ngIf="saving" class="bi bi-arrow-repeat animate-spin"></i>
+          {{ saving ? 'Saving…' : 'Update password' }}
+        </button>
+      </div>
+    </form>
+  </div>
+</div>

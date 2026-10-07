@@ -1,0 +1,143 @@
+<div class="min-h-screen grid lg:grid-cols-[1.1fr_1fr] bg-[var(--bg)] text-[var(--text)] font-login">
+
+  <!-- Brand panel -->
+  <aside
+    class="relative hidden lg:flex flex-col justify-between overflow-hidden bg-[var(--panel)] border-r border-[var(--border)] p-12 xl:p-16">
+
+    <!-- Lens / cipher rings -->
+    <svg class="lens pointer-events-none absolute top-1/2 -right-[22%] w-[52rem] max-w-none -translate-y-1/2"
+      viewBox="0 0 600 600" fill="none" aria-hidden="true">
+      <defs>
+        <radialGradient id="lensGlow" cx="50%" cy="50%" r="50%">
+          <stop offset="0" stop-color="#c28a55" stop-opacity=".30" />
+          <stop offset="1" stop-color="#c28a55" stop-opacity="0" />
+        </radialGradient>
+        <linearGradient id="lensArc" x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stop-color="#e6b886" />
+          <stop offset="1" stop-color="#8c5a2e" stop-opacity="0" />
+        </linearGradient>
+      </defs>
+
+      <circle cx="300" cy="300" r="300" fill="url(#lensGlow)" />
+      <circle cx="300" cy="300" r="282" stroke="#c28a55" stroke-opacity=".12" />
+
+      <g class="spin-slow">
+        <circle cx="300" cy="300" r="244" stroke="#c28a55" stroke-opacity=".38" stroke-width="7"
+          stroke-dasharray="1.5 11" />
+      </g>
+
+      <circle cx="300" cy="300" r="200" stroke="#c28a55" stroke-opacity=".18" />
+
+      <g class="spin-rev">
+        <circle cx="300" cy="300" r="160" stroke="url(#lensArc)" stroke-width="2" stroke-linecap="round"
+          stroke-dasharray="340 700" />
+      </g>
+
+      <circle cx="300" cy="300" r="112" stroke="#c28a55" stroke-opacity=".28" />
+      <circle cx="300" cy="300" r="64" fill="url(#lensGlow)" />
+      <circle class="pulse" cx="300" cy="300" r="5" fill="#e6b886" />
+    </svg>
+
+    <header class="relative z-10 intro">
+      <img src="assets/images/lensCipher.png" alt="LensCipher" class="h-11 w-auto" />
+    </header>
+
+    <div class="relative z-10 max-w-lg intro intro-2">
+      <h1 class="text-4xl xl:text-5xl font-semibold leading-[1.12] tracking-tight">
+        Secure control of every device.
+      </h1>
+      <p class="mt-5 max-w-md text-base leading-relaxed text-[var(--muted)]">
+        Manage apps, branding and organizations from one console.
+      </p>
+    </div>
+
+    <footer class="relative z-10 intro intro-3 flex items-end justify-between gap-6">
+      <p class="max-w-[16rem] text-sm leading-relaxed text-[var(--muted)]">
+        Every sign-in is recorded in your audit logs.
+      </p>
+      <div class="flex items-center gap-3 text-xs text-[var(--muted)]">
+        <span>Powered by</span>
+        <img src="assets/images/tvmax-logo.png" alt="TVMax" class="h-6 w-auto opacity-90" />
+      </div>
+    </footer>
+  </aside>
+
+  <!-- Form panel -->
+  <main class="relative flex items-center justify-center px-5 py-12 sm:px-10">
+    <div class="glow-bg pointer-events-none absolute inset-0" aria-hidden="true"></div>
+
+    <div
+      class="card relative w-full max-w-[27rem] rounded-2xl border border-[var(--border)] bg-[var(--card)] p-8 sm:p-10">
+
+      <img src="assets/images/lensCipher.png" alt="LensCipher" class="mb-8 h-9 w-auto lg:hidden" />
+
+      <h2 class="text-[1.75rem] font-semibold tracking-tight">Welcome back</h2>
+      <p class="mt-2 text-sm text-[var(--muted)]">Sign in to your LensCipher console.</p>
+
+      <div *ngIf="errorMessage" role="alert"
+        class="mt-6 rounded-lg border border-[var(--danger)]/40 bg-[var(--danger)]/10 px-4 py-3 text-sm text-[var(--danger)]">
+        {{ errorMessage }}
+      </div>
+      <form [formGroup]="form" (ngSubmit)="onSubmit()" novalidate class="mt-8 space-y-5">
+        <!-- Email -->
+        <div>
+          <label for="email" class="mb-1.5 block text-sm font-medium">Email</label>
+          <input id="email" type="email" formControlName="email" autocomplete="username" placeholder="you@company.com"
+            class="field" [class.field-error]="email.touched && email.invalid"
+            [attr.aria-invalid]="email.touched && email.invalid" />
+          <p *ngIf="email.touched && email.hasError('required')" class="msg-error">Enter your email address.</p>
+          <p *ngIf="email.touched && email.hasError('email')" class="msg-error">Enter a valid email, like
+            name&#64;company.com.</p>
+        </div>
+
+        <!-- Password -->
+        <div>
+          <div class="mb-1.5">
+            <label for="password" class="block text-sm font-medium">Password</label>
+          </div>
+          <div class="relative">
+            <input id="password" [type]="showPassword ? 'text' : 'password'" formControlName="password"
+              autocomplete="current-password" placeholder="Enter your password" class="field pr-12"
+              [class.field-error]="password.touched && password.invalid"
+              [attr.aria-invalid]="password.touched && password.invalid" />
+            <button type="button" (click)="showPassword = !showPassword"
+              class="absolute inset-y-0 right-0 rounded-r-lg px-3 text-[var(--muted)] transition-colors hover:text-[var(--bronze-light)]"
+              [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'" [attr.aria-pressed]="showPassword">
+              <svg *ngIf="!showPassword" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12Z" />
+                <circle cx="12" cy="12" r="3" />
+              </svg>
+              <svg *ngIf="showPassword" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.7"
+                viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                  d="M3 3l18 18M10.6 6.1A9.9 9.9 0 0 1 12 6c6.4 0 10 6 10 6a17 17 0 0 1-3.2 3.9M6.6 6.6C3.7 8.4 2 12 2 12s3.6 7 10 7c1.6 0 3-.4 4.3-1M9.9 9.9a3 3 0 0 0 4.2 4.2" />
+              </svg>
+            </button>
+          </div>
+          <p *ngIf="password.touched && password.hasError('required')" class="msg-error">Enter your password.</p>
+          <p *ngIf="password.touched && password.hasError('minlength')" class="msg-error">Password must be at least 6
+            characters.</p>
+        </div>
+
+        <!-- Submit -->
+        <button type="submit" [disabled]="isLoading" class="btn-primary">
+          <svg *ngIf="isLoading" class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="3" opacity=".25" />
+            <path d="M21 12a9 9 0 0 0-9-9" stroke="currentColor" stroke-width="3" stroke-linecap="round" />
+          </svg>
+          <span>{{ isLoading ? 'Signing in…' : 'Sign in' }}</span>
+        </button>
+      </form>
+
+      <p class="mt-8 text-center text-sm text-[var(--muted)]">
+        Need access? Contact your organization administrator.
+      </p>
+    </div>
+
+    <p class="absolute bottom-5 left-0 right-0 text-center text-xs text-[var(--muted)]/70 lg:hidden">
+      © {{ year }} TVMax. All rights reserved.
+    </p>
+  </main>
+</div>

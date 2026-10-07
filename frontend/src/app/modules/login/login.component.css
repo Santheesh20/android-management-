@@ -1,0 +1,158 @@
+/* ---------- Theme tokens: tweak the bronze to match your dashboard exactly ---------- */
+:host {
+  --bg: #0e0d0c;
+  --panel: #12100e;
+  --card: #181512;
+  --border: #2d2721;
+  --text: #f2ece4;
+  --muted: #a1978b;
+  --bronze: #c28a55;
+  --bronze-light: #e6b886;
+  --bronze-deep: #8c5a2e;
+  --danger: #f0897c;
+  display: block;
+}
+
+.font-login {
+  font-family: 'Manrope', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Soft bronze light behind the form */
+.glow-bg {
+  background:
+    radial-gradient(60% 50% at 50% 45%, rgba(194, 138, 85, 0.10), transparent 70%);
+}
+
+/* ---------- Lens rings ---------- */
+.lens { opacity: 0.95; }
+.spin-slow,
+.spin-rev {
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.spin-slow { animation: spin 120s linear infinite; }
+.spin-rev  { animation: spin 38s linear infinite reverse; }
+.pulse {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: pulse 3.6s ease-in-out infinite;
+}
+@keyframes spin  { to { transform: rotate(360deg); } }
+@keyframes pulse {
+  0%, 100% { opacity: 0.55; transform: scale(1); }
+  50%      { opacity: 1;    transform: scale(1.9); }
+}
+
+/* ---------- Single entrance sequence ---------- */
+.intro,
+.card {
+  animation: rise 0.9s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+}
+.intro-2 { animation-delay: 0.12s; }
+.intro-3 { animation-delay: 0.24s; }
+.card    { animation-delay: 0.18s; }
+@keyframes rise {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ---------- Card edge highlight ---------- */
+.card {
+  box-shadow:
+    0 40px 90px -40px rgba(0, 0, 0, 0.9),
+    inset 0 1px 0 rgba(230, 184, 134, 0.10);
+}
+.card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 12%;
+  right: 12%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--bronze), transparent);
+  opacity: 0.7;
+}
+
+/* ---------- Inputs ---------- */
+.field {
+  width: 100%;
+  border-radius: 0.6rem;
+  border: 1px solid var(--border);
+  background: #100e0c;
+  padding: 0.75rem 0.95rem;
+  font-size: 0.9375rem;
+  color: var(--text);
+  transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+}
+.field::placeholder { color: #6f665b; }
+.field:hover { border-color: #43392f; }
+.field:focus {
+  outline: none;
+  border-color: var(--bronze);
+  background: #13110e;
+  box-shadow: 0 0 0 3px rgba(194, 138, 85, 0.20);
+}
+.field.field-error { border-color: var(--danger); }
+.field.field-error:focus { box-shadow: 0 0 0 3px rgba(240, 137, 124, 0.20); }
+
+/* Keep browser autofill dark */
+.field:-webkit-autofill,
+.field:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--text);
+  caret-color: var(--text);
+  box-shadow: 0 0 0 1000px #100e0c inset;
+  transition: background-color 9999s ease-in-out 0s;
+}
+
+.msg-error {
+  margin-top: 0.4rem;
+  font-size: 0.8125rem;
+  color: var(--danger);
+}
+
+/* ---------- Primary button ---------- */
+.btn-primary {
+  position: relative;
+  display: inline-flex;
+  width: 100%;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  overflow: hidden;
+  border-radius: 0.6rem;
+  padding: 0.85rem 1rem;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: #1a120a;
+  background: linear-gradient(135deg, var(--bronze-light), var(--bronze) 55%, var(--bronze-deep));
+  box-shadow: 0 10px 30px -12px rgba(194, 138, 85, 0.65);
+  transition: transform 0.2s, box-shadow 0.2s, filter 0.2s;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(105deg, transparent 35%, rgba(255, 255, 255, 0.35) 50%, transparent 65%);
+  transform: translateX(-120%);
+}
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 14px 34px -12px rgba(194, 138, 85, 0.8);
+}
+.btn-primary:hover:not(:disabled)::after {
+  transform: translateX(120%);
+  transition: transform 0.9s ease;
+}
+.btn-primary:focus-visible {
+  outline: 2px solid var(--bronze-light);
+  outline-offset: 3px;
+}
+.btn-primary:disabled {
+  cursor: not-allowed;
+  filter: saturate(0.7) brightness(0.9);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .spin-slow, .spin-rev, .pulse, .intro, .card { animation: none; }
+  .btn-primary, .btn-primary::after { transition: none; }
+}

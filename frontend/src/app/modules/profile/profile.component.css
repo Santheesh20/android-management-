@@ -1,0 +1,58 @@
+/* Bronze primary button, same gradient as your icon badges */
+.btn-bronze {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  border-radius: 0.5rem;
+  padding: 0.55rem 1.1rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #fff;
+  background: linear-gradient(135deg, #8a5a45, #b98668);
+  box-shadow: 0 6px 18px -8px rgba(185, 134, 104, 0.7);
+  transition: filter 0.2s, transform 0.2s;
+}
+.btn-bronze:hover:not(:disabled) { filter: brightness(1.1); transform: translateY(-1px); }
+.btn-bronze:focus-visible { outline: 2px solid #b98668; outline-offset: 2px; }
+.btn-bronze:disabled { opacity: 0.7; cursor: not-allowed; }
+
+/* Modal inputs */
+.pwd-field {
+  width: 100%;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(185, 134, 104, 0.2);
+  background: #0a0e1a;
+  padding: 0.6rem 2.75rem 0.6rem 0.85rem;
+  font-size: 0.875rem;
+  color: #e5e7eb;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.pwd-field:focus {
+  outline: none;
+  border-color: #b98668;
+  box-shadow: 0 0 0 3px rgba(185, 134, 104, 0.2);
+}
+.pwd-field.pwd-error { border-color: #f87171; }
+
+.eye {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  padding: 0 0.8rem;
+  color: #64748b;
+  transition: color 0.2s;
+}
+.eye:hover { color: #e5cdbf; }
+
+.msg { margin-top: 0.35rem; font-size: 0.78rem; color: #f87171; }
+
+/* Modal open animation (answers a click, so it is welcome motion) */
+.backdrop { animation: fade 0.2s ease both; }
+.modal    { animation: pop 0.25s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+@keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes pop  { from { opacity: 0; transform: translateY(10px) scale(0.98); } to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .backdrop, .modal, .btn-bronze { animation: none; transition: none; }
+}
