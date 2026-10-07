@@ -1,11 +1,9 @@
 const rateLimit = require('express-rate-limit');
 
-
 function createRateLimiter(options) {
     return rateLimit({
         windowMs: options.windowMs,
         limit: options.limit,
-
         standardHeaders: true,
         legacyHeaders: false,
 
@@ -19,24 +17,20 @@ function createRateLimiter(options) {
     });
 }
 
-
 const globalRateLimiter = createRateLimiter({
     windowMs: 15 * 60 * 1000,
     limit: 300
 });
-
 
 const loginRateLimiter = createRateLimiter({
     windowMs: 15 * 60 * 1000,
     limit: 10
 });
 
-
 const refreshRateLimiter = createRateLimiter({
     windowMs: 15 * 60 * 1000,
     limit: 30
 });
-
 
 const changePasswordRateLimiter =
     createRateLimiter({
@@ -44,12 +38,10 @@ const changePasswordRateLimiter =
         limit: 5
     });
 
-
 const registerRateLimiter = createRateLimiter({
     windowMs: 60 * 60 * 1000,
     limit: 5
 });
-
 
 module.exports = {
     globalRateLimiter,
