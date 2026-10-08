@@ -278,7 +278,6 @@ async function changeUserPassword(
     }
 }
 
-
 module.exports = {
     login,
     refresh,
