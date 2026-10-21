@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs');
 
 const User = require('../models/user.model');
+const Permission = require('../models/permission.model');
 
 require('../models/role.model');
 
@@ -112,16 +113,33 @@ async function validateUserForLogin(
     };
 }
 
-async function getEffectivePermissionIds(
-    user
-) {
+async function getEffectivePermissionIds(user) {
+    const rolePermissionIds =
+        user.roleId?.permissionIds || [];
+
     const userPermissionIds =
         user.permissionIds || [];
 
-    return userPermissionIds.map(
-        function (permissionId) {
-            return permissionId.toString();
-        }
+    // Combine role grants and user-specific grants.
+    // Convert IDs to strings and remove duplicates.
+    const permissionIdSet = new Set([
+        ...rolePermissionIds.map((id) => id.toString()),
+        ...userPermissionIds.map((id) => id.toString())
+    ]);
+
+    const permissionIds = [...permissionIdSet];
+
+    if (permissionIds.length === 0) {
+        return [];
+    }
+
+    const activePermissions = await Permission.find({
+        _id: { $in: permissionIds },
+        isActive: true
+    }).select('_id').lean();
+
+    return activePermissions.map((permission) =>
+        permission._id.toString()
     );
 }
 

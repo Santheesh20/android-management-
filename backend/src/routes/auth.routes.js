@@ -1,4 +1,5 @@
 const express = require('express');
+const authorize = require('../middleware/authorize.middleware');
 
 const authController =
     require('../controllers/auth.controller');
@@ -55,7 +56,17 @@ router.get(
     authenticate,
     authController.getMe
 );
-
+router.get(
+    '/test-authorization',
+    authenticate,
+    authorize('dashboard.view'),
+    (req, res) => {
+        return res.status(200).json({
+            success: true,
+            message: 'Authorization successful'
+        });
+    }
+);
 router.post(
     '/change-password',
     changePasswordRateLimiter,

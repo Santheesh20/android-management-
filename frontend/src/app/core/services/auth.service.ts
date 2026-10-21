@@ -1,5 +1,4 @@
 import { Injectable } from '@angular/core';
-
 import {
   Observable,
   of,
@@ -9,7 +8,6 @@ import {
 
 import { ClientService } from './client.service';
 import { MasterUrlService } from './master-url.service';
-
 import {
   AuthUser,
   ChangePasswordRequest,
@@ -22,30 +20,22 @@ import {
   RefreshResponse
 } from '../models/auth.model';
 
-
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
   private accessToken: string | null = null;
-
   private currentUser: AuthUser | null = null;
-
   private csrfToken: string | null = null;
-
 
   constructor(
     private readonly client: ClientService,
-
     private readonly masterUrl: MasterUrlService
-  ) {}
-
+  ) { }
 
   login(
     request: LoginRequest
   ): Observable<LoginResponse> {
-
     return this.client.post<LoginResponse>(
       this.masterUrl.auth.login,
       request,
@@ -53,11 +43,8 @@ export class AuthService {
         withCredentials: true
       }
     ).pipe(
-
       tap((response) => {
-
         if (response.success) {
-
           this.setSession(
             response.data.accessToken,
             response.data.user
@@ -67,20 +54,15 @@ export class AuthService {
     );
   }
 
-
   getCsrfToken(): Observable<CsrfResponse> {
-
     return this.client.get<CsrfResponse>(
       this.masterUrl.auth.csrf,
       {
         withCredentials: true
       }
     ).pipe(
-
       tap((response) => {
-
         if (response.success) {
-
           this.csrfToken =
             response.data.csrfToken;
         }
@@ -88,20 +70,16 @@ export class AuthService {
     );
   }
 
-
   ensureCsrfToken(): Observable<string> {
 
     if (this.csrfToken) {
-
       return of(
         this.csrfToken
       );
     }
 
     return this.getCsrfToken().pipe(
-
       switchMap((response) => {
-
         if (
           !response.success ||
           !response.data.csrfToken
@@ -119,19 +97,13 @@ export class AuthService {
     );
   }
 
-
   getStoredCsrfToken(): string | null {
-
     return this.csrfToken;
   }
 
-
   refresh(): Observable<RefreshResponse> {
-
     return this.ensureCsrfToken().pipe(
-
       switchMap(() => {
-
         return this.client.post<RefreshResponse>(
           this.masterUrl.auth.refresh,
           {},
@@ -140,11 +112,8 @@ export class AuthService {
           }
         );
       }),
-
       tap((response) => {
-
         if (response.success) {
-
           this.setSession(
             response.data.accessToken,
             response.data.user
@@ -154,13 +123,9 @@ export class AuthService {
     );
   }
 
-
   logout(): Observable<LogoutResponse> {
-
     return this.ensureCsrfToken().pipe(
-
       switchMap(() => {
-
         return this.client.post<LogoutResponse>(
           this.masterUrl.auth.logout,
           {},
@@ -169,37 +134,27 @@ export class AuthService {
           }
         );
       }),
-
       tap(() => {
-
         this.clearSession();
       })
     );
   }
 
-
   getMe(): Observable<MeResponse> {
-
     return this.client.get<MeResponse>(
       this.masterUrl.auth.me
     ).pipe(
-
       tap((response) => {
-
         if (response.success) {
-
-          this.currentUser =
-            response.data.user;
+          this.currentUser = response.data.user;
         }
       })
     );
   }
 
-
   changePassword(
     request: ChangePasswordRequest
   ): Observable<ChangePasswordResponse> {
-
     return this.client.post<ChangePasswordResponse>(
       this.masterUrl.auth.changePassword,
       request,
@@ -207,55 +162,37 @@ export class AuthService {
         withCredentials: true
       }
     ).pipe(
-
       tap((response) => {
-
         if (response.success) {
-
           this.clearSession();
         }
       })
     );
   }
 
-
   getAccessToken(): string | null {
-
     return this.accessToken;
   }
 
-
   getCurrentUser(): AuthUser | null {
-
     return this.currentUser;
   }
 
-
   isAuthenticated(): boolean {
-
     return this.accessToken !== null;
   }
-
 
   setSession(
     accessToken: string,
     user: AuthUser
   ): void {
-
-    this.accessToken =
-      accessToken;
-
-    this.currentUser =
-      user;
+    this.accessToken = accessToken;
+    this.currentUser = user;
   }
 
-
   clearSession(): void {
-
     this.accessToken = null;
-
     this.currentUser = null;
-
     this.csrfToken = null;
   }
 }

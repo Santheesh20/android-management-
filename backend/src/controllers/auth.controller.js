@@ -47,20 +47,16 @@ async function login(req, res, next) {
 
         return res.status(200).json({
             success: true,
-
             message: 'Login successful',
-
             data: {
                 accessToken:
                     loginSession.accessToken,
 
                 tokenType: 'Bearer',
-
                 expiresIn:
                     env.jwt
                         .accessExpiresInMilliseconds /
                     1000,
-
                 user:
                     loginSession.user
             }
@@ -69,7 +65,6 @@ async function login(req, res, next) {
         next(error);
     }
 }
-
 
 async function refresh(req, res, next) {
     try {
@@ -106,7 +101,6 @@ async function refresh(req, res, next) {
 
         return res.status(200).json({
             success: true,
-
             message:
                 'Token refreshed successfully',
 
@@ -129,7 +123,6 @@ async function refresh(req, res, next) {
         next(error);
     }
 }
-
 
 async function logout(req, res, next) {
     try {
@@ -155,14 +148,12 @@ async function logout(req, res, next) {
     }
 }
 
-
 async function getMe(req, res, next) {
     try {
         const user = req.user;
 
         return res.status(200).json({
             success: true,
-
             message:
                 'Authenticated user',
 

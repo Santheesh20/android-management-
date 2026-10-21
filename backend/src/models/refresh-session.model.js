@@ -2,21 +2,21 @@ const mongoose = require('mongoose');
 
 const refreshSessionSchema = new mongoose.Schema(
     {
-      userId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'User',
-    required: true,
-    index: true
-},
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true,
+            index: true
+        },
 
-familyId: {
-    type: String,
-    required: true,
-    index: true,
-    trim: true
-},
+        familyId: {
+            type: String,
+            required: true,
+            index: true,
+            trim: true
+        },
 
-tokenId: {
+        tokenId: {
             type: String,
             required: true,
             unique: true,
@@ -56,5 +56,4 @@ const RefreshSession = mongoose.model(
     'RefreshSession',
     refreshSessionSchema
 );
-
 module.exports = RefreshSession;
