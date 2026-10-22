@@ -1,8 +1,6 @@
 const User = require('../models/user.model');
 const Permission = require('../models/permission.model');
-
 require('../models/role.model');
-
 const {
     verifyAccessToken
 } = require('../utils/jwt');
@@ -28,7 +26,6 @@ async function authenticate(req, res, next) {
 
         const parts =
             authorizationHeader.trim().split(/\s+/);
-
         if (
             parts.length !== 2 ||
             parts[0].toLowerCase() !== 'bearer' ||
@@ -38,7 +35,6 @@ async function authenticate(req, res, next) {
         }
 
         const token = parts[1];
-
         let payload;
 
         try {

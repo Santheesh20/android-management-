@@ -30,7 +30,7 @@ function normalizeEmail(email) {
 function validateEmail(email) {
     if (!email) {
         throw new Error('Email is required');
-    }
+    }  
 
     if (email.length > 254) {
         throw new Error('Email is too long');
