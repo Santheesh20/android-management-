@@ -87,25 +87,44 @@ async function authenticate(req, res, next) {
             return sendUnauthorized(res);
         }
 
-        const permissionIds =
+
+        const rolePermissionIds =
+            user.roleId.permissionIds || [];
+
+        const userPermissionIds =
             user.permissionIds || [];
 
-        const permissions =
-            await Permission.find({
-                _id: {
-                    $in: permissionIds
-                },
-                isActive: true
-            }).select(
-                'code'
-            );
+        // Combine role permissions and user-specific permissions.
+        // Convert IDs to strings and remove duplicates.
+        const effectivePermissionIdSet = new Set([
+            ...rolePermissionIds.map((id) => id.toString()),
+            ...userPermissionIds.map((id) => id.toString())
+        ]);
 
-        const permissionCodes =
-            permissions.map(
-                function (permission) {
-                    return permission.code;
-                }
-            );
+        const effectivePermissionIds = [
+            ...effectivePermissionIdSet
+        ];
+
+        // Only active permissions are effective.
+        const permissions = await Permission.find({
+            _id: {
+                $in: effectivePermissionIds
+            },
+            isActive: true
+        }).select('_id code').lean();
+
+        const permissionCodes = permissions.map(
+            function (permission) {
+                return permission.code;
+            }
+        );
+
+        const activePermissionIds = permissions.map(
+            function (permission) {
+                return permission._id.toString();
+            }
+        );
+
 
         req.auth = {
             userId:
@@ -125,12 +144,7 @@ async function authenticate(req, res, next) {
             permissions:
                 permissionCodes,
 
-            permissionIds:
-                permissionIds.map(
-                    function (permissionId) {
-                        return permissionId.toString();
-                    }
-                ),
+            permissionIds: activePermissionIds,
 
             scope: null,
 

@@ -7,6 +7,7 @@ const notFoundMiddleware = require('./middleware/not-found.middleware');
 const errorMiddleware = require('./middleware/error.middleware');
 const rateLimitMiddleware = require('./middleware/rate-limit.middleware');
 const authRoutes = require('./routes/auth.routes');
+const deviceRoutes = require('./routes/device.routes');
 
 const env = require('./config/env');
 
@@ -40,6 +41,7 @@ app.get('/health', function (req, res) {
 app.use('/api', rateLimitMiddleware.globalRateLimiter);
 
 app.use('/api/v1/auth', authRoutes);
+app.use('/api/v1/devices', deviceRoutes);
 
 app.use(notFoundMiddleware);
 app.use(errorMiddleware);
