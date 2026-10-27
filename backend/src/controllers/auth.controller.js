@@ -18,9 +18,7 @@ const env = require('../config/env');
 async function login(req, res, next) {
     try {
         const email = req.body.email;
-
         const password = req.body.password;
-
         const validation =
             await validateUserForLogin(
                 email,

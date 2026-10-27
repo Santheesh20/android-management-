@@ -29,7 +29,6 @@ function authorize(...requiredPermissions) {
             ? req.auth.permissions
             : [];
 
-        // Require every permission specified by the route.
         const hasAllPermissions =
             requiredPermissions.every(
                 (permission) =>
@@ -46,5 +45,4 @@ function authorize(...requiredPermissions) {
         return next();
     };
 }
-
 module.exports = authorize;
